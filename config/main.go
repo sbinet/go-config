@@ -65,17 +65,6 @@ func NewFile() *File {
 // === Utility
 // ===
 
-func firstIndex(s string, delim []byte) int {
-	for i := 0; i < len(s); i++ {
-		for j := 0; j < len(delim); j++ {
-			if s[i] == delim[j] {
-				return i
-			}
-		}
-	}
-	return -1
-}
-
 func stripComments(l string) string {
 	// comments are preceded by space or TAB
 	for _, c := range []string{" ;", "\t;", " #", "\t#"} {

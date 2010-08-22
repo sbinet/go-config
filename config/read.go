@@ -38,7 +38,6 @@ func ReadFile(fname string) (c *File, err os.Error) {
 	return c, nil
 }
 
-
 func (self *File) read(buf *bufio.Reader) (err os.Error) {
 	var section, option string
 	for {
@@ -73,10 +72,10 @@ func (self *File) read(buf *bufio.Reader) (err os.Error) {
 			return os.NewError("section not found: must start with section")
 
 		default: // other alternatives
-			i := firstIndex(l, []byte{'=', ':'})
+			i := strings.IndexAny(l, "=:")
 			switch {
 			case i > 0: // option and value
-				i := firstIndex(l, []byte{'=', ':'})
+				i := strings.IndexAny(l, "=:")
 				option = strings.TrimSpace(l[0:i])
 				value := strings.TrimSpace(stripComments(l[i+1:]))
 				self.AddOption(section, option, value)
