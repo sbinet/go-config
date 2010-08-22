@@ -59,10 +59,10 @@ func (self *ConfigFile) HasSection(section string) bool {
 	return ok
 }
 
-/* GetSections returns the list of sections in the configuration.
+/* Sections returns the list of sections in the configuration.
 (The default section always exists.)
 */
-func (self *ConfigFile) GetSections() (sections []string) {
+func (self *ConfigFile) Sections() (sections []string) {
 	sections = make([]string, len(self.data))
 
 	i := 0

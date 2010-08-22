@@ -16,11 +16,11 @@ import (
 )
 
 
-/* GetBool has the same behaviour as GetString but converts the response to bool.
+/* Bool has the same behaviour as String but converts the response to bool.
 See constant BoolStrings for string values converted to bool.
 */
-func (self *ConfigFile) GetBool(section string, option string) (value bool, err os.Error) {
-	sv, err := self.GetString(section, option)
+func (self *ConfigFile) Bool(section string, option string) (value bool, err os.Error) {
+	sv, err := self.String(section, option)
 	if err != nil {
 		return false, err
 	}
@@ -33,11 +33,9 @@ func (self *ConfigFile) GetBool(section string, option string) (value bool, err 
 	return value, nil
 }
 
-/* GetFloat has the same behaviour as GetString but converts the response to
-float.
-*/
-func (self *ConfigFile) GetFloat(section string, option string) (value float, err os.Error) {
-	sv, err := self.GetString(section, option)
+/* Float has the same behaviour as String but converts the response to float. */
+func (self *ConfigFile) Float(section string, option string) (value float, err os.Error) {
+	sv, err := self.String(section, option)
 	if err == nil {
 		value, err = strconv.Atof(sv)
 	}
@@ -45,9 +43,9 @@ func (self *ConfigFile) GetFloat(section string, option string) (value float, er
 	return value, err
 }
 
-/* GetInt has the same behaviour as GetString but converts the response to int. */
-func (self *ConfigFile) GetInt(section string, option string) (value int, err os.Error) {
-	sv, err := self.GetString(section, option)
+/* Int has the same behaviour as String but converts the response to int. */
+func (self *ConfigFile) Int(section string, option string) (value int, err os.Error) {
+	sv, err := self.String(section, option)
 	if err == nil {
 		value, err = strconv.Atoi(sv)
 	}
@@ -55,13 +53,13 @@ func (self *ConfigFile) GetInt(section string, option string) (value int, err os
 	return value, err
 }
 
-/* GetRawString gets the (raw) string value for the given option in the section.
+/* RawString gets the (raw) string value for the given option in the section.
 The raw string value is not subjected to unfolding, which was illustrated in the
 beginning of this documentation.
 
 It returns an error if either the section or the option do not exist.
 */
-func (self *ConfigFile) GetRawString(section string, option string) (value string, err os.Error) {
+func (self *ConfigFile) RawString(section string, option string) (value string, err os.Error) {
 	section = strings.ToLower(section)
 	option = strings.ToLower(option)
 
@@ -74,16 +72,16 @@ func (self *ConfigFile) GetRawString(section string, option string) (value strin
 	return "", os.NewError("section not found")
 }
 
-/* GetString gets the string value for the given option in the section.
+/* String gets the string value for the given option in the section.
 If the value needs to be unfolded (see e.g. %(host)s example in the beginning of
-this documentation), then GetString does this unfolding automatically, up to
+this documentation), then String does this unfolding automatically, up to
 DepthValues number of iterations.
 
 It returns an error if either the section or the option do not exist, or the
 unfolding cycled.
 */
-func (self *ConfigFile) GetString(section string, option string) (value string, err os.Error) {
-	value, err = self.GetRawString(section, option)
+func (self *ConfigFile) String(section string, option string) (value string, err os.Error) {
+	value, err = self.RawString(section, option)
 	if err != nil {
 		return "", err
 	}

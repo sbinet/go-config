@@ -66,11 +66,11 @@ func (self *ConfigFile) HasOption(section string, option string) bool {
 	return okd || oknd
 }
 
-/* GetOptions returns the list of options available in the given section.
+/* Options returns the list of options available in the given section.
 It returns an error if the section does not exist and an empty list if the
 section is empty. Options within the default section are also included.
 */
-func (self *ConfigFile) GetOptions(section string) (options []string, err os.Error) {
+func (self *ConfigFile) Options(section string) (options []string, err os.Error) {
 	section = strings.ToLower(section)
 
 	if _, ok := self.data[section]; !ok {

@@ -21,17 +21,17 @@ func testGet(t *testing.T, c *ConfigFile, section string, option string, expecte
 	ok := false
 	switch _ := expected.(type) {
 	case string:
-		v, _ := c.GetString(section, option)
+		v, _ := c.String(section, option)
 		if v == expected.(string) {
 			ok = true
 		}
 	case int:
-		v, _ := c.GetInt(section, option)
+		v, _ := c.Int(section, option)
 		if v == expected.(int) {
 			ok = true
 		}
 	case bool:
-		v, _ := c.GetBool(section, option)
+		v, _ := c.Bool(section, option)
 		if v == expected.(bool) {
 			ok = true
 		}
@@ -48,26 +48,26 @@ func TestInMemory(t *testing.T) {
 	c := NewConfigFile()
 
 	// test empty structure
-	if len(c.GetSections()) != 1 { // should be empty
-		t.Errorf("GetSections failure: invalid length")
+	if len(c.Sections()) != 1 { // should be empty
+		t.Errorf("Sections failure: invalid length")
 	}
 	if c.HasSection("no-section") { // test presence of missing section
 		t.Errorf("HasSection failure: invalid section")
 	}
-	_, err := c.GetOptions("no-section") // get options for missing section
+	_, err := c.Options("no-section") // get options for missing section
 	if err == nil {
-		t.Errorf("GetOptions failure: invalid section")
+		t.Errorf("Options failure: invalid section")
 	}
 	if c.HasOption("no-section", "no-option") { // test presence of option for missing section
 		t.Errorf("HasSection failure: invalid/section/option")
 	}
-	_, err = c.GetString("no-section", "no-option") // get value from missing section/option
+	_, err = c.String("no-section", "no-option") // get value from missing section/option
 	if err == nil {
-		t.Errorf("GetString failure: got value for missing section/option")
+		t.Errorf("String failure: got value for missing section/option")
 	}
-	_, err = c.GetInt("no-section", "no-option") // get value from missing section/option
+	_, err = c.Int("no-section", "no-option") // get value from missing section/option
 	if err == nil {
-		t.Errorf("GetInt failure: got value for missing section/option")
+		t.Errorf("Int failure: got value for missing section/option")
 	}
 	if c.RemoveSection("no-section") { // remove missing section
 		t.Errorf("RemoveSection failure: removed missing section")
@@ -103,9 +103,9 @@ func TestInMemory(t *testing.T) {
 	if c.RemoveOption("section1", "option1") { // remove again
 		t.Errorf("RemoveOption failure: true on second remove")
 	}
-	_, err = c.GetString("section1", "option1") // read it back again
+	_, err = c.String("section1", "option1") // read it back again
 	if err == nil {
-		t.Errorf("GetString failure: got value for removed section/option")
+		t.Errorf("String failure: got value for removed section/option")
 	}
 	if !c.RemoveSection("section1") { // remove existing section
 		t.Errorf("RemoveSection failure: false on first remove")
@@ -137,11 +137,11 @@ func TestInMemory(t *testing.T) {
 	// test cycle
 	c.AddOption(DefaultSection, "opt1", "%(opt2)s")
 	c.AddOption(DefaultSection, "opt2", "%(opt1)s")
-	_, err = c.GetString(DefaultSection, "opt1")
+	_, err = c.String(DefaultSection, "opt1")
 	if err == nil {
-		t.Errorf("GetString failure: no error for cycle")
+		t.Errorf("String failure: no error for cycle")
 	} else if strings.Index(err.String(), "cycle") < 0 {
-		t.Errorf("GetString failure: incorrect error for cycle")
+		t.Errorf("String failure: incorrect error for cycle")
 	}
 }
 
@@ -176,12 +176,12 @@ func TestReadFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ReadConfigFile failure: " + err.String())
 	}
-	if len(c.GetSections()) != 3 { // check number of sections
-		t.Errorf("GetSections failure: wrong number of sections")
+	if len(c.Sections()) != 3 { // check number of sections
+		t.Errorf("Sections failure: wrong number of sections")
 	}
-	opts, err := c.GetOptions("section-1") // check number of options
-	if len(opts) != 6 {                    // 4 of [section-1] plus 2 of [default]
-		t.Errorf("GetOptions failure: wrong number of options")
+	opts, err := c.Options("section-1") // check number of options
+	if len(opts) != 6 {                 // 4 of [section-1] plus 2 of [default]
+		t.Errorf("Options failure: wrong number of options")
 	}
 
 	testGet(t, c, "section-1", "option1", "value1")

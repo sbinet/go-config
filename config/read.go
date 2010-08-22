@@ -82,7 +82,7 @@ func (self *ConfigFile) read(buf *bufio.Reader) (err os.Error) {
 				self.AddOption(section, option, value)
 
 			case section != "" && option != "": // continuation of multi-line value
-				prev, _ := self.GetRawString(section, option)
+				prev, _ := self.RawString(section, option)
 				value := strings.TrimSpace(stripComments(l))
 				self.AddOption(section, option, prev+"\n"+value)
 
