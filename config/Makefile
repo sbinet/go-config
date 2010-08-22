@@ -9,7 +9,7 @@
 
 include $(GOROOT)/src/Make.$(GOARCH)
 
-TARG=config
+TARG=github.com/kless/goconfig/config
 GOFILES=\
 	main.go\
 	get.go\
