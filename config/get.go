@@ -98,7 +98,9 @@ func (c *ConfigFile) GetString(section string, option string) (value string, err
 			break
 		}
 
-		noption := value[vr[2]:vr[3]]
+		// Take off leading '%(' and trailing ')s'
+		noption := strings.TrimLeft(vr, "%(")
+		noption = strings.TrimRight(noption, ")s")
 		noption = strings.ToLower(noption)
 
 		nvalue, _ := c.data[DefaultSection][noption] // search variable in default section
@@ -110,7 +112,7 @@ func (c *ConfigFile) GetString(section string, option string) (value string, err
 		}
 
 		// substitute by new value and take off leading '%(' and trailing ')s'
-		value = value[0:vr[2]-2] + nvalue + value[vr[3]+2:]
+		value = strings.Replace(value, vr, nvalue, -1)
 	}
 
 	if i == DepthValues {
