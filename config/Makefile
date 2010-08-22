@@ -12,6 +12,11 @@ include $(GOROOT)/src/Make.$(GOARCH)
 TARG=config
 GOFILES=\
 	main.go\
+	get.go\
+	option.go\
+	read.go\
+	section.go\
+	write.go\
 
 include $(GOROOT)/src/Make.pkg
 
