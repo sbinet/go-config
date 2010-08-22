@@ -1,0 +1,18 @@
+##### Notice
+
+*This file documents the changes in ***goconfig***.*
+
+*Items should be added to this file as:*
+
+	### YYYY-MM-DD  Author
+
+	+ *myfile.ext (myfunction):* My additional changes made to myfile.ext.
+
+	+ *myfile.ext (unrelated_change):* My changes made to myfile.ext but
+	completely unrelated to the above.
+
+	+ *anotherfile.ext (somefunction):* More changes.
+
+***
+
+
