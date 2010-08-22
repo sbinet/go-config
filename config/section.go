@@ -18,13 +18,13 @@ import (
 It returns true if the new section was inserted, and false if the section
 already existed.
 */
-func (c *ConfigFile) AddSection(section string) bool {
+func (self *ConfigFile) AddSection(section string) bool {
 	section = strings.ToLower(section)
 
-	if _, ok := c.data[section]; ok {
+	if _, ok := self.data[section]; ok {
 		return false
 	}
-	c.data[section] = make(map[string]string)
+	self.data[section] = make(map[string]string)
 
 	return true
 }
@@ -32,19 +32,19 @@ func (c *ConfigFile) AddSection(section string) bool {
 /* RemoveSection removes a section from the configuration.
 It returns true if the section was removed, and false if section did not exist.
 */
-func (c *ConfigFile) RemoveSection(section string) bool {
+func (self *ConfigFile) RemoveSection(section string) bool {
 	section = strings.ToLower(section)
 
-	switch _, ok := c.data[section]; {
+	switch _, ok := self.data[section]; {
 	case !ok:
 		return false
 	case section == DefaultSection:
 		return false // default section cannot be removed
 	default:
-		for o, _ := range c.data[section] {
-			c.data[section][o] = "", false
+		for o, _ := range self.data[section] {
+			self.data[section][o] = "", false
 		}
-		c.data[section] = nil, false
+		self.data[section] = nil, false
 	}
 
 	return true
@@ -53,8 +53,8 @@ func (c *ConfigFile) RemoveSection(section string) bool {
 /* HasSection checks if the configuration has the given section.
 (The default section always exists.)
 */
-func (c *ConfigFile) HasSection(section string) bool {
-	_, ok := c.data[strings.ToLower(section)]
+func (self *ConfigFile) HasSection(section string) bool {
+	_, ok := self.data[strings.ToLower(section)]
 
 	return ok
 }
@@ -62,11 +62,11 @@ func (c *ConfigFile) HasSection(section string) bool {
 /* GetSections returns the list of sections in the configuration.
 (The default section always exists.)
 */
-func (c *ConfigFile) GetSections() (sections []string) {
-	sections = make([]string, len(c.data))
+func (self *ConfigFile) GetSections() (sections []string) {
+	sections = make([]string, len(self.data))
 
 	i := 0
-	for s, _ := range c.data {
+	for s, _ := range self.data {
 		sections[i] = s
 		i++
 	}

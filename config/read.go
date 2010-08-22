@@ -39,7 +39,7 @@ func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
 }
 
 
-func (c *ConfigFile) read(buf *bufio.Reader) (err os.Error) {
+func (self *ConfigFile) read(buf *bufio.Reader) (err os.Error) {
 	var section, option string
 	for {
 		l, err := buf.ReadString('\n') // parse line-by-line
@@ -67,7 +67,7 @@ func (c *ConfigFile) read(buf *bufio.Reader) (err os.Error) {
 		case l[0] == '[' && l[len(l)-1] == ']': // new section
 			option = "" // reset multi-line value
 			section = strings.TrimSpace(l[1 : len(l)-1])
-			c.AddSection(section)
+			self.AddSection(section)
 
 		case section == "": // not new section and no section defined so far
 			return os.NewError("section not found: must start with section")
@@ -79,12 +79,12 @@ func (c *ConfigFile) read(buf *bufio.Reader) (err os.Error) {
 				i := firstIndex(l, []byte{'=', ':'})
 				option = strings.TrimSpace(l[0:i])
 				value := strings.TrimSpace(stripComments(l[i+1:]))
-				c.AddOption(section, option, value)
+				self.AddOption(section, option, value)
 
 			case section != "" && option != "": // continuation of multi-line value
-				prev, _ := c.GetRawString(section, option)
+				prev, _ := self.GetRawString(section, option)
 				value := strings.TrimSpace(stripComments(l))
-				c.AddOption(section, option, prev+"\n"+value)
+				self.AddOption(section, option, prev+"\n"+value)
 
 			default:
 				return os.NewError("could not parse line: " + l)

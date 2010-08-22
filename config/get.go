@@ -19,8 +19,8 @@ import (
 /* GetBool has the same behaviour as GetString but converts the response to bool.
 See constant BoolStrings for string values converted to bool.
 */
-func (c *ConfigFile) GetBool(section string, option string) (value bool, err os.Error) {
-	sv, err := c.GetString(section, option)
+func (self *ConfigFile) GetBool(section string, option string) (value bool, err os.Error) {
+	sv, err := self.GetString(section, option)
 	if err != nil {
 		return false, err
 	}
@@ -36,8 +36,8 @@ func (c *ConfigFile) GetBool(section string, option string) (value bool, err os.
 /* GetFloat has the same behaviour as GetString but converts the response to
 float.
 */
-func (c *ConfigFile) GetFloat(section string, option string) (value float, err os.Error) {
-	sv, err := c.GetString(section, option)
+func (self *ConfigFile) GetFloat(section string, option string) (value float, err os.Error) {
+	sv, err := self.GetString(section, option)
 	if err == nil {
 		value, err = strconv.Atof(sv)
 	}
@@ -46,8 +46,8 @@ func (c *ConfigFile) GetFloat(section string, option string) (value float, err o
 }
 
 /* GetInt has the same behaviour as GetString but converts the response to int. */
-func (c *ConfigFile) GetInt(section string, option string) (value int, err os.Error) {
-	sv, err := c.GetString(section, option)
+func (self *ConfigFile) GetInt(section string, option string) (value int, err os.Error) {
+	sv, err := self.GetString(section, option)
 	if err == nil {
 		value, err = strconv.Atoi(sv)
 	}
@@ -61,12 +61,12 @@ beginning of this documentation.
 
 It returns an error if either the section or the option do not exist.
 */
-func (c *ConfigFile) GetRawString(section string, option string) (value string, err os.Error) {
+func (self *ConfigFile) GetRawString(section string, option string) (value string, err os.Error) {
 	section = strings.ToLower(section)
 	option = strings.ToLower(option)
 
-	if _, ok := c.data[section]; ok {
-		if value, ok = c.data[section][option]; ok {
+	if _, ok := self.data[section]; ok {
+		if value, ok = self.data[section][option]; ok {
 			return value, nil
 		}
 		return "", os.NewError("option not found")
@@ -82,8 +82,8 @@ DepthValues number of iterations.
 It returns an error if either the section or the option do not exist, or the
 unfolding cycled.
 */
-func (c *ConfigFile) GetString(section string, option string) (value string, err os.Error) {
-	value, err = c.GetRawString(section, option)
+func (self *ConfigFile) GetString(section string, option string) (value string, err os.Error) {
+	value, err = self.GetRawString(section, option)
 	if err != nil {
 		return "", err
 	}
@@ -103,9 +103,9 @@ func (c *ConfigFile) GetString(section string, option string) (value string, err
 		noption = strings.TrimRight(noption, ")s")
 		noption = strings.ToLower(noption)
 
-		nvalue, _ := c.data[DefaultSection][noption] // search variable in default section
-		if _, ok := c.data[section][noption]; ok {
-			nvalue = c.data[section][noption]
+		nvalue, _ := self.data[DefaultSection][noption] // search variable in default section
+		if _, ok := self.data[section][noption]; ok {
+			nvalue = self.data[section][noption]
 		}
 		if nvalue == "" {
 			return "", os.NewError("option not found: " + noption)

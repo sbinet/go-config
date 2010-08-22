@@ -19,7 +19,7 @@ import (
 The desired file permissions must be passed as in os.Open. The header is a
 string that is saved as a comment in the first line of the file.
 */
-func (c *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (err os.Error) {
+func (self *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (err os.Error) {
 	var file *os.File
 
 	if file, err = os.Open(fname, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, perm); err != nil {
@@ -27,7 +27,7 @@ func (c *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (
 	}
 
 	buf := bufio.NewWriter(file)
-	if err = c.write(buf, header); err != nil {
+	if err = self.write(buf, header); err != nil {
 		return err
 	}
 	buf.Flush()
@@ -35,14 +35,14 @@ func (c *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (
 	return file.Close()
 }
 
-func (c *ConfigFile) write(buf *bufio.Writer, header string) (err os.Error) {
+func (self *ConfigFile) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
 		if _, err = buf.WriteString("# " + header + "\n"); err != nil {
 			return err
 		}
 	}
 
-	for section, sectionmap := range c.data {
+	for section, sectionmap := range self.data {
 		if section == DefaultSection && len(sectionmap) == 0 {
 			continue // skip default section if empty
 		}
