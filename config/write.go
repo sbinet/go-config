@@ -37,7 +37,7 @@ func (c *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (
 
 func (c *ConfigFile) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
-		if err = buf.WriteString("# " + header + "\n"); err != nil {
+		if _, err = buf.WriteString("# " + header + "\n"); err != nil {
 			return err
 		}
 	}
@@ -46,15 +46,15 @@ func (c *ConfigFile) write(buf *bufio.Writer, header string) (err os.Error) {
 		if section == DefaultSection && len(sectionmap) == 0 {
 			continue // skip default section if empty
 		}
-		if err = buf.WriteString("[" + section + "]\n"); err != nil {
+		if _, err = buf.WriteString("[" + section + "]\n"); err != nil {
 			return err
 		}
 		for option, value := range sectionmap {
-			if err = buf.WriteString(option + "=" + value + "\n"); err != nil {
+			if _, err = buf.WriteString(option + "=" + value + "\n"); err != nil {
 				return err
 			}
 		}
-		if err = buf.WriteString("\n"); err != nil {
+		if _, err = buf.WriteString("\n"); err != nil {
 			return err
 		}
 	}
