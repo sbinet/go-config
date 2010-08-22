@@ -36,7 +36,7 @@ Given a sample configuration file:
 
 To read this configuration file, do:
 
-	c, _ := configfile.ReadFile("config.cfg")
+	c, _ := config.ReadFile("config.ini")
 
 	c.String("service-1", "url")
 	// result is string :http://www.example.com/some/path"
@@ -50,15 +50,15 @@ To read this configuration file, do:
 	c.String("service-1", "comments")
 	// result is string "This is a multi-line\nentry"
 
-Note the support for unfolding variables (such as %(base-url)s), which are read
-from the special (reserved) section name [default].
+Note the support for unfolding variables (such as *%(base-url)s*), which are read
+from the special (reserved) section name *[default]*.
 
 A new configuration file can also be created with:
 
-	c := configfile.NewFile()
+	c := config.NewFile()
 	c.AddSection("section")
 	c.AddOption("section", "option", "value")
-	c.WriteFile("config.cfg", 0644, "A header for this file")
+	c.WriteFile("config.ini", 0644, "A header for this file")
 
 This results in the file:
 
