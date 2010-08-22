@@ -16,8 +16,8 @@ import (
 
 
 const (
-	DefaultSection = "default" // Default section name (must be lower-case).
-	DepthValues    = 200       // Maximum allowed depth when recursively substituing variable names.
+	DEFAULT_SECTION = "default" // Default section name (must be lower-case).
+	_DEPTH_VALUES   = 200       // Maximum allowed depth when recursively substituing variable names.
 )
 
 var (
@@ -56,7 +56,7 @@ func NewFile() *File {
 	c := new(File)
 	c.data = make(map[string]map[string]string)
 
-	c.AddSection(DefaultSection) // default section always exists
+	c.AddSection(DEFAULT_SECTION) // default section always exists
 
 	return c
 }

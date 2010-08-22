@@ -75,7 +75,7 @@ func (self *File) RawString(section string, option string) (value string, err os
 /* String gets the string value for the given option in the section.
 If the value needs to be unfolded (see e.g. %(host)s example in the beginning of
 this documentation), then String does this unfolding automatically, up to
-DepthValues number of iterations.
+_DEPTH_VALUES number of iterations.
 
 It returns an error if either the section or the option do not exist, or the
 unfolding cycled.
@@ -90,7 +90,7 @@ func (self *File) String(section string, option string) (value string, err os.Er
 
 	var i int
 
-	for i = 0; i < DepthValues; i++ { // keep a sane depth
+	for i = 0; i < _DEPTH_VALUES; i++ { // keep a sane depth
 		vr := varRegExp.FindString(value)
 		if len(vr) == 0 {
 			break
@@ -101,7 +101,7 @@ func (self *File) String(section string, option string) (value string, err os.Er
 		noption = strings.TrimRight(noption, ")s")
 		noption = strings.ToLower(noption)
 
-		nvalue, _ := self.data[DefaultSection][noption] // search variable in default section
+		nvalue, _ := self.data[DEFAULT_SECTION][noption] // search variable in default section
 		if _, ok := self.data[section][noption]; ok {
 			nvalue = self.data[section][noption]
 		}
@@ -113,8 +113,8 @@ func (self *File) String(section string, option string) (value string, err os.Er
 		value = strings.Replace(value, vr, nvalue, -1)
 	}
 
-	if i == DepthValues {
-		return "", os.NewError("possible cycle while unfolding variables: max depth of " + strconv.Itoa(DepthValues) + " reached")
+	if i == _DEPTH_VALUES {
+		return "", os.NewError("possible cycle while unfolding variables: max depth of " + strconv.Itoa(_DEPTH_VALUES) + " reached")
 	}
 
 	return value, nil

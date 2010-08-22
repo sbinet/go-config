@@ -38,7 +38,7 @@ func (self *File) RemoveSection(section string) bool {
 	switch _, ok := self.data[section]; {
 	case !ok:
 		return false
-	case section == DefaultSection:
+	case section == DEFAULT_SECTION:
 		return false // default section cannot be removed
 	default:
 		for o, _ := range self.data[section] {

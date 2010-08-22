@@ -60,7 +60,7 @@ func (self *File) HasOption(section string, option string) bool {
 		return false
 	}
 
-	_, okd := self.data[DefaultSection][option]
+	_, okd := self.data[DEFAULT_SECTION][option]
 	_, oknd := self.data[section][option]
 
 	return okd || oknd
@@ -77,9 +77,9 @@ func (self *File) Options(section string) (options []string, err os.Error) {
 		return nil, os.NewError("section not found")
 	}
 
-	options = make([]string, len(self.data[DefaultSection])+len(self.data[section]))
+	options = make([]string, len(self.data[DEFAULT_SECTION])+len(self.data[section]))
 	i := 0
-	for s, _ := range self.data[DefaultSection] {
+	for s, _ := range self.data[DEFAULT_SECTION] {
 		options[i] = s
 		i++
 	}

@@ -43,7 +43,7 @@ func (self *File) write(buf *bufio.Writer, header string) (err os.Error) {
 	}
 
 	for section, sectionmap := range self.data {
-		if section == DefaultSection && len(sectionmap) == 0 {
+		if section == DEFAULT_SECTION && len(sectionmap) == 0 {
 			continue // skip default section if empty
 		}
 		if _, err = buf.WriteString("[" + section + "]\n"); err != nil {
