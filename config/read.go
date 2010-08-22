@@ -16,17 +16,17 @@ import (
 )
 
 
-/* ReadConfigFile reads a file and returns a new configuration representation.
+/* ReadFile reads a file and returns a new configuration representation.
 This representation can be queried with GetString, etc.
 */
-func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
+func ReadFile(fname string) (c *File, err os.Error) {
 	var file *os.File
 
 	if file, err = os.Open(fname, os.O_RDONLY, 0); err != nil {
 		return nil, err
 	}
 
-	c = NewConfigFile()
+	c = NewFile()
 	if err = c.read(bufio.NewReader(file)); err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
 }
 
 
-func (self *ConfigFile) read(buf *bufio.Reader) (err os.Error) {
+func (self *File) read(buf *bufio.Reader) (err os.Error) {
 	var section, option string
 	for {
 		l, err := buf.ReadString('\n') // parse line-by-line

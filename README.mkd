@@ -36,7 +36,7 @@ Given a sample configuration file:
 
 To read this configuration file, do:
 
-	c, _ := configfile.ReadConfigFile("config.cfg")
+	c, _ := configfile.ReadFile("config.cfg")
 
 	c.String("service-1", "url")
 	// result is string :http://www.example.com/some/path"
@@ -55,10 +55,10 @@ from the special (reserved) section name [default].
 
 A new configuration file can also be created with:
 
-	c := configfile.NewConfigFile()
+	c := configfile.NewFile()
 	c.AddSection("section")
 	c.AddOption("section", "option", "value")
-	c.WriteConfigFile("config.cfg", 0644, "A header for this file")
+	c.WriteFile("config.cfg", 0644, "A header for this file")
 
 This results in the file:
 

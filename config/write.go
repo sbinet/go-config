@@ -15,11 +15,11 @@ import (
 )
 
 
-/* WriteConfigFile saves the configuration representation to a file.
+/* WriteFile saves the configuration representation to a file.
 The desired file permissions must be passed as in os.Open. The header is a
 string that is saved as a comment in the first line of the file.
 */
-func (self *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (err os.Error) {
+func (self *File) WriteFile(fname string, perm uint32, header string) (err os.Error) {
 	var file *os.File
 
 	if file, err = os.Open(fname, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, perm); err != nil {
@@ -35,7 +35,7 @@ func (self *ConfigFile) WriteConfigFile(fname string, perm uint32, header string
 	return file.Close()
 }
 
-func (self *ConfigFile) write(buf *bufio.Writer, header string) (err os.Error) {
+func (self *File) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
 		if _, err = buf.WriteString("# " + header + "\n"); err != nil {
 			return err

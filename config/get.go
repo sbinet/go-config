@@ -19,7 +19,7 @@ import (
 /* Bool has the same behaviour as String but converts the response to bool.
 See constant BoolStrings for string values converted to bool.
 */
-func (self *ConfigFile) Bool(section string, option string) (value bool, err os.Error) {
+func (self *File) Bool(section string, option string) (value bool, err os.Error) {
 	sv, err := self.String(section, option)
 	if err != nil {
 		return false, err
@@ -34,7 +34,7 @@ func (self *ConfigFile) Bool(section string, option string) (value bool, err os.
 }
 
 /* Float has the same behaviour as String but converts the response to float. */
-func (self *ConfigFile) Float(section string, option string) (value float, err os.Error) {
+func (self *File) Float(section string, option string) (value float, err os.Error) {
 	sv, err := self.String(section, option)
 	if err == nil {
 		value, err = strconv.Atof(sv)
@@ -44,7 +44,7 @@ func (self *ConfigFile) Float(section string, option string) (value float, err o
 }
 
 /* Int has the same behaviour as String but converts the response to int. */
-func (self *ConfigFile) Int(section string, option string) (value int, err os.Error) {
+func (self *File) Int(section string, option string) (value int, err os.Error) {
 	sv, err := self.String(section, option)
 	if err == nil {
 		value, err = strconv.Atoi(sv)
@@ -59,7 +59,7 @@ beginning of this documentation.
 
 It returns an error if either the section or the option do not exist.
 */
-func (self *ConfigFile) RawString(section string, option string) (value string, err os.Error) {
+func (self *File) RawString(section string, option string) (value string, err os.Error) {
 	section = strings.ToLower(section)
 	option = strings.ToLower(option)
 
@@ -80,7 +80,7 @@ DepthValues number of iterations.
 It returns an error if either the section or the option do not exist, or the
 unfolding cycled.
 */
-func (self *ConfigFile) String(section string, option string) (value string, err os.Error) {
+func (self *File) String(section string, option string) (value string, err os.Error) {
 	value, err = self.RawString(section, option)
 	if err != nil {
 		return "", err

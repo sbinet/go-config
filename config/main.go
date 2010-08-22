@@ -15,10 +15,12 @@ import (
 )
 
 
-var (
+const (
 	DefaultSection = "default" // Default section name (must be lower-case).
 	DepthValues    = 200       // Maximum allowed depth when recursively substituing variable names.
+)
 
+var (
 	// Strings accepted as bool.
 	BoolStrings = map[string]bool{
 		"t":     true,
@@ -35,23 +37,23 @@ var (
 		"0":     false,
 	}
 
-	varRegExp = regexp.MustCompile(`%\(([a-zA-Z0-9_.\-]+)\)s`)
+	varRegExp = regexp.MustCompile(`%\(([a-zA-Z0-9_.\-]+)\)s`) // %(variable)s
 )
 
 
-/* ConfigFile is the representation of configuration settings.
+/* File is the representation of configuration settings.
 The public interface is entirely through methods.
 */
-type ConfigFile struct {
+type File struct {
 	data map[string]map[string]string // Maps sections to options to values.
 }
 
-/* NewConfigFile creates an empty configuration representation.
+/* NewFile creates an empty configuration representation.
 This representation can be filled with AddSection and AddOption and then saved
-to a file using WriteConfigFile.
+to a file using WriteFile.
 */
-func NewConfigFile() *ConfigFile {
-	c := new(ConfigFile)
+func NewFile() *File {
+	c := new(File)
 	c.data = make(map[string]map[string]string)
 
 	c.AddSection(DefaultSection) // default section always exists

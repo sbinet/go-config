@@ -17,7 +17,7 @@ import (
 )
 
 
-func testGet(t *testing.T, c *ConfigFile, section string, option string, expected interface{}) {
+func testGet(t *testing.T, c *File, section string, option string, expected interface{}) {
 	ok := false
 	switch _ := expected.(type) {
 	case string:
@@ -45,7 +45,7 @@ func testGet(t *testing.T, c *ConfigFile, section string, option string, expecte
 
 /* Create configuration representation and run multiple tests in-memory. */
 func TestInMemory(t *testing.T) {
-	c := NewConfigFile()
+	c := NewFile()
 
 	// test empty structure
 	if len(c.Sections()) != 1 { // should be empty
@@ -172,9 +172,9 @@ func TestReadFile(t *testing.T) {
 	buf.Flush()
 	file.Close()
 
-	c, err := ReadConfigFile(tmp)
+	c, err := ReadFile(tmp)
 	if err != nil {
-		t.Fatalf("ReadConfigFile failure: " + err.String())
+		t.Fatalf("ReadFile failure: " + err.String())
 	}
 	if len(c.Sections()) != 3 { // check number of sections
 		t.Errorf("Sections failure: wrong number of sections")
@@ -196,7 +196,7 @@ func TestWriteReadFile(t *testing.T) {
 	const tmp = "/tmp/__config_test.go__garbage"
 	defer os.Remove(tmp)
 
-	cw := NewConfigFile()
+	cw := NewFile()
 
 	// write file; will test only read later on
 	cw.AddSection("First-Section")
@@ -210,12 +210,12 @@ func TestWriteReadFile(t *testing.T) {
 	cw.AddOption("Another-Section", "useHTTPS", "y")
 	cw.AddOption("Another-Section", "url", "%(base-url)s/some/path")
 
-	cw.WriteConfigFile(tmp, 0644, "Test file for test-case")
+	cw.WriteFile(tmp, 0644, "Test file for test-case")
 
 	// read back file and test
-	cr, err := ReadConfigFile(tmp)
+	cr, err := ReadFile(tmp)
 	if err != nil {
-		t.Fatalf("ReadConfigFile failure: " + err.String())
+		t.Fatalf("ReadFile failure: " + err.String())
 	}
 
 	testGet(t, cr, "first-section", "option1", "value option1")

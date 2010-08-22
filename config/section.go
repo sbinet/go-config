@@ -18,7 +18,7 @@ import (
 It returns true if the new section was inserted, and false if the section
 already existed.
 */
-func (self *ConfigFile) AddSection(section string) bool {
+func (self *File) AddSection(section string) bool {
 	section = strings.ToLower(section)
 
 	if _, ok := self.data[section]; ok {
@@ -32,7 +32,7 @@ func (self *ConfigFile) AddSection(section string) bool {
 /* RemoveSection removes a section from the configuration.
 It returns true if the section was removed, and false if section did not exist.
 */
-func (self *ConfigFile) RemoveSection(section string) bool {
+func (self *File) RemoveSection(section string) bool {
 	section = strings.ToLower(section)
 
 	switch _, ok := self.data[section]; {
@@ -53,7 +53,7 @@ func (self *ConfigFile) RemoveSection(section string) bool {
 /* HasSection checks if the configuration has the given section.
 (The default section always exists.)
 */
-func (self *ConfigFile) HasSection(section string) bool {
+func (self *File) HasSection(section string) bool {
 	_, ok := self.data[strings.ToLower(section)]
 
 	return ok
@@ -62,7 +62,7 @@ func (self *ConfigFile) HasSection(section string) bool {
 /* Sections returns the list of sections in the configuration.
 (The default section always exists.)
 */
-func (self *ConfigFile) Sections() (sections []string) {
+func (self *File) Sections() (sections []string) {
 	sections = make([]string, len(self.data))
 
 	i := 0
