@@ -16,21 +16,22 @@ import (
 
 /* AddSection adds a new section to the configuration.
 
-If the section is nil then uses the section by default.
+If the section is nil then uses the section by default which it's already
+created.
 
 It returns true if the new section was inserted, and false if the section
 already existed.
 */
 func (self *File) AddSection(section string) bool {
-	if section == "" {
-		section = _DEFAULT_SECTION
-	} else {
-		section = strings.ToLower(section)
-
-		if _, ok := self.data[section]; ok {
-			return false
-		}
+	if section == "" { // _DEFAULT_SECTION
+		return false
 	}
+
+	section = strings.ToLower(section)
+	if _, ok := self.data[section]; ok {
+		return false
+	}
+
 	self.data[section] = make(map[string]string)
 
 	return true
