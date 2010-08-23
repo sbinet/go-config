@@ -1,11 +1,29 @@
 goconfig
 ========
 
-This package implements a parser for configuration files on INI format. It
-allows easy reading and writing of structured configuration files.
+This package implements a basic configuration file parser language which
+provides a structure similar to what you would find on Microsoft Windows INI
+files.
 
-The functionality and workflow is loosely based on the *configparser.py* package
-of the Python Standard Library.
+The configuration file consists of sections, led by a "*[section]*" header and
+followed by "*name: value*" entries; "*name=value*" is also accepted. Note that
+leading whitespace is removed from values. The optional values can contain
+format strings which refer to other values in the same section, or values in a
+special *DEFAULT* section. Additional defaults can be provided on initialization
+and retrieval. Lines beginning with "*#*" or "*;*" are ignored and may be used
+to provide comments.
+
+For example:
+
+	[My Section]
+	foodir: %(dir)s/whatever
+	dir=foo
+
+would resolve the "*%(dir)s*" to the value of "*dir*" (*foo* in this case). All
+reference expansions are done on demand.
+
+The functionality and workflow is loosely based on the *configparser* package of
+the Python Standard Library.
 
 
 ## Installation
@@ -23,15 +41,15 @@ Nothing.
 Given a sample configuration file:
 
 	[default]
-	host=www.example.com
-	protocol=http://
-	base-url=%(protocol)s%(host)s
+	host: www.example.com
+	protocol: http://
+	base-url: %(protocol)s%(host)s
 
 	[service-1]
-	url=%(base-url)s/some/path
-	delegation : on
+	url: %(base-url)s/some/path
+	delegation: on
 	maxclients=200 # do not set this higher
-	comments=This is a multi-line
+	comments: This is a multi-line
 		entry	; And this is a comment
 
 To read this configuration file, do:
@@ -63,8 +81,9 @@ A new configuration file can also be created with:
 This results in the file:
 
 	# A header for this file
+
 	[section]
-	option=value
+	option: value
 
 Note that sections and options are case-insensitive (values are case-sensitive)
 and are converted to lowercase when saved to a file.
