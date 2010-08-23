@@ -17,7 +17,7 @@ import (
 
 
 /* Bool has the same behaviour as String but converts the response to bool.
-See constant BoolStrings for string values converted to bool.
+See "boolString" for string values converted to bool.
 */
 func (self *File) Bool(section string, option string) (value bool, err os.Error) {
 	sv, err := self.String(section, option)
@@ -25,7 +25,7 @@ func (self *File) Bool(section string, option string) (value bool, err os.Error)
 		return false, err
 	}
 
-	value, ok := BoolStrings[strings.ToLower(sv)]
+	value, ok := boolString[strings.ToLower(sv)]
 	if !ok {
 		return false, os.NewError("could not parse bool value: " + sv)
 	}

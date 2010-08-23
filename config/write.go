@@ -11,6 +11,7 @@ package config
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 )
 
@@ -37,26 +38,28 @@ func (self *File) WriteFile(fname string, perm uint32, header string) (err os.Er
 
 func (self *File) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
-		if _, err = buf.WriteString("# " + header + "\n"); err != nil {
+		if _, err = buf.WriteString(fmt.Sprint(
+			DefaultComment, header, "\n")); err != nil {
 			return err
 		}
 	}
 
 	for section, sectionmap := range self.data {
 		if section == DEFAULT_SECTION && len(sectionmap) == 0 {
-			continue // skip default section if empty
+			continue // Skips default section if empty.
 		}
-		if _, err = buf.WriteString("[" + section + "]\n"); err != nil {
+		if _, err = buf.WriteString(fmt.Sprint("\n[", section, "]\n")); err != nil {
 			return err
 		}
 		for option, value := range sectionmap {
-			if _, err = buf.WriteString(option + "=" + value + "\n"); err != nil {
+			if _, err = buf.WriteString(fmt.Sprint(
+				option, DefaultSeparator, value, "\n")); err != nil {
 				return err
 			}
 		}
-		if _, err = buf.WriteString("\n"); err != nil {
-			return err
-		}
+	}
+	if _, err = buf.WriteString("\n"); err != nil {
+		return err
 	}
 
 	return nil

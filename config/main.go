@@ -20,9 +20,15 @@ const (
 	_DEPTH_VALUES   = 200       // Maximum allowed depth when recursively substituing variable names.
 )
 
+// Values by default
 var (
-	// Strings accepted as bool.
-	BoolStrings = map[string]bool{
+	DefaultComment   = "# " // Another valid option is ";"
+	DefaultSeparator = ": " // Another valid option is "="
+)
+
+var (
+	// Strings accepted as boolean.
+	boolString = map[string]bool{
 		"t":     true,
 		"true":  true,
 		"y":     true,
@@ -41,9 +47,7 @@ var (
 )
 
 
-/* File is the representation of configuration settings.
-The public interface is entirely through methods.
-*/
+/* File is the representation of configuration settings. */
 type File struct {
 	data map[string]map[string]string // Maps sections to options to values.
 }
