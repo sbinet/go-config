@@ -13,6 +13,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 
@@ -38,14 +39,18 @@ func (self *File) WriteFile(fname string, perm uint32, header string) (err os.Er
 
 func (self *File) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
+		if i := strings.Index(header, "\n"); i != -1 {
+			header = strings.Replace(header, "\n", "\n"+_DEFAULT_COMMENT, -1)
+		}
+
 		if _, err = buf.WriteString(fmt.Sprint(
-			DefaultComment, header, "\n")); err != nil {
+			_DEFAULT_COMMENT, header, "\n")); err != nil {
 			return err
 		}
 	}
 
 	for section, sectionmap := range self.data {
-		if section == DEFAULT_SECTION && len(sectionmap) == 0 {
+		if section == _DEFAULT_SECTION && len(sectionmap) == 0 {
 			continue // Skips default section if empty.
 		}
 		if _, err = buf.WriteString(fmt.Sprint("\n[", section, "]\n")); err != nil {
@@ -53,7 +58,7 @@ func (self *File) write(buf *bufio.Writer, header string) (err os.Error) {
 		}
 		for option, value := range sectionmap {
 			if _, err = buf.WriteString(fmt.Sprint(
-				option, DefaultSeparator, value, "\n")); err != nil {
+				option, _DEFAULT_SEPARATOR, value, "\n")); err != nil {
 				return err
 			}
 		}

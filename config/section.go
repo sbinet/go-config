@@ -15,14 +15,21 @@ import (
 
 
 /* AddSection adds a new section to the configuration.
+
+If the section is nil then uses the section by default.
+
 It returns true if the new section was inserted, and false if the section
 already existed.
 */
 func (self *File) AddSection(section string) bool {
-	section = strings.ToLower(section)
+	if section == "" {
+		section = _DEFAULT_SECTION
+	} else {
+		section = strings.ToLower(section)
 
-	if _, ok := self.data[section]; ok {
-		return false
+		if _, ok := self.data[section]; ok {
+			return false
+		}
 	}
 	self.data[section] = make(map[string]string)
 
@@ -38,7 +45,7 @@ func (self *File) RemoveSection(section string) bool {
 	switch _, ok := self.data[section]; {
 	case !ok:
 		return false
-	case section == DEFAULT_SECTION:
+	case section == _DEFAULT_SECTION:
 		return false // default section cannot be removed
 	default:
 		for o, _ := range self.data[section] {

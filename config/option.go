@@ -16,13 +16,21 @@ import (
 
 
 /* AddOption adds a new option and value to the configuration.
+
+If the section is nil then uses the section by default; if it does not exist in
+advance, it is created.
+
 It returns true if the option and value were inserted, and false if the value
-was overwritten. If the section does not exist in advance, it is created.
+was overwritten.
 */
 func (self *File) AddOption(section string, option string, value string) bool {
 	self.AddSection(section) // make sure section exists
 
-	section = strings.ToLower(section)
+	if section == "" {
+		section = _DEFAULT_SECTION
+	} else {
+		section = strings.ToLower(section)
+	}
 	option = strings.ToLower(option)
 
 	_, ok := self.data[section][option]
@@ -60,7 +68,7 @@ func (self *File) HasOption(section string, option string) bool {
 		return false
 	}
 
-	_, okd := self.data[DEFAULT_SECTION][option]
+	_, okd := self.data[_DEFAULT_SECTION][option]
 	_, oknd := self.data[section][option]
 
 	return okd || oknd
@@ -77,9 +85,9 @@ func (self *File) Options(section string) (options []string, err os.Error) {
 		return nil, os.NewError("section not found")
 	}
 
-	options = make([]string, len(self.data[DEFAULT_SECTION])+len(self.data[section]))
+	options = make([]string, len(self.data[_DEFAULT_SECTION])+len(self.data[section]))
 	i := 0
-	for s, _ := range self.data[DEFAULT_SECTION] {
+	for s, _ := range self.data[_DEFAULT_SECTION] {
 		options[i] = s
 		i++
 	}

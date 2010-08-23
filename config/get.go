@@ -101,7 +101,7 @@ func (self *File) String(section string, option string) (value string, err os.Er
 		noption = strings.TrimRight(noption, ")s")
 		noption = strings.ToLower(noption)
 
-		nvalue, _ := self.data[DEFAULT_SECTION][noption] // search variable in default section
+		nvalue, _ := self.data[_DEFAULT_SECTION][noption] // search variable in default section
 		if _, ok := self.data[section][noption]; ok {
 			nvalue = self.data[section][noption]
 		}

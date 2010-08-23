@@ -83,7 +83,7 @@ func TestInMemory(t *testing.T) {
 	if c.AddSection("section1") { // re-add same section
 		t.Errorf("AddSection failure: true on second insert")
 	}
-	if c.AddSection(DEFAULT_SECTION) { // default section always exists
+	if c.AddSection(_DEFAULT_SECTION) { // default section always exists
 		t.Errorf("AddSection failure: true on default section insert")
 	}
 
@@ -135,9 +135,9 @@ func TestInMemory(t *testing.T) {
 	testGet(t, c, "section2", "test-false", false) // read it back
 
 	// test cycle
-	c.AddOption(DEFAULT_SECTION, "opt1", "%(opt2)s")
-	c.AddOption(DEFAULT_SECTION, "opt2", "%(opt1)s")
-	_, err = c.String(DEFAULT_SECTION, "opt1")
+	c.AddOption(_DEFAULT_SECTION, "opt1", "%(opt2)s")
+	c.AddOption(_DEFAULT_SECTION, "opt2", "%(opt1)s")
+	_, err = c.String(_DEFAULT_SECTION, "opt1")
 	if err == nil {
 		t.Errorf("String failure: no error for cycle")
 	} else if strings.Index(err.String(), "cycle") < 0 {
@@ -162,7 +162,7 @@ func TestReadFile(t *testing.T) {
 	buf.WriteString("  # Let me put another comment\n")
 	buf.WriteString("    option3= line1\nline2 \n\tline3 # Comment\n")
 	buf.WriteString("; Another comment\n")
-	buf.WriteString("[" + DEFAULT_SECTION + "]\n")
+	buf.WriteString("[" + _DEFAULT_SECTION + "]\n")
 	buf.WriteString("variable1=small\n")
 	buf.WriteString("variable2=a_part_of_a_%(variable1)s_test\n")
 	buf.WriteString("[secTION-2]\n")
@@ -203,9 +203,9 @@ func TestWriteReadFile(t *testing.T) {
 	cw.AddOption("First-Section", "option1", "value option1")
 	cw.AddOption("First-Section", "option2", "2")
 
-	cw.AddOption(DEFAULT_SECTION, "host", "www.example.com")
-	cw.AddOption(DEFAULT_SECTION, "protocol", "https://")
-	cw.AddOption(DEFAULT_SECTION, "base-url", "%(protocol)s%(host)s")
+	cw.AddOption(_DEFAULT_SECTION, "host", "www.example.com")
+	cw.AddOption(_DEFAULT_SECTION, "protocol", "https://")
+	cw.AddOption(_DEFAULT_SECTION, "base-url", "%(protocol)s%(host)s")
 
 	cw.AddOption("Another-Section", "useHTTPS", "y")
 	cw.AddOption("Another-Section", "url", "%(base-url)s/some/path")
