@@ -116,7 +116,7 @@ For credits, see AUTHORS and CONTRIBUTORS files.
 
 ## ChangeLog
 
-See CHANGES file.
+See [commit history][3].
 
 
 ***
@@ -124,5 +124,6 @@ See CHANGES file.
 
 
 [1]: http://github.com/kless
-[2]: http://github.com/kless/go-config/issues
+[2]: http://github.com/kless/goconfig/issues
+[3]: http://github.com/kless/goconfig/commits/master
 
