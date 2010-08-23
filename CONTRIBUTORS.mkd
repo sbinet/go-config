@@ -17,7 +17,7 @@ because the organization holds the copyright.*
 
 ### Initial author
 
-msbranco <http://github.com/msbranco>
+Miguel S. Branco <msbranco@gmail.com>
 
 ### Maintainer
 

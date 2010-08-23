@@ -17,5 +17,5 @@ explanation.*
 ***
 
 John Mac <charles.beck@sent.com>
-msbranco <http://github.com/msbranco>
+Miguel S. Branco <msbranco@gmail.com>
 
