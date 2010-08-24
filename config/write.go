@@ -39,6 +39,7 @@ func (self *File) WriteFile(fname string, perm uint32, header string) (err os.Er
 
 func (self *File) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
+		// Adds comment character after of each new line.
 		if i := strings.Index(header, "\n"); i != -1 {
 			header = strings.Replace(header, "\n", "\n"+_DEFAULT_COMMENT, -1)
 		}
