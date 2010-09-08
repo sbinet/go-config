@@ -3,11 +3,11 @@
 [MAIN]
 author: msbranco
 download-url: github.com/kless/goconfig/config
-version: 0.9.5
+version: 0.9
 summary: Configuration file parser for INI format
 author-email: http://github.com/msbranco
 
-[DEFAULT]
+[CORE]
 vcs: git
 package-name: config
 metadata-version: 1.1
@@ -16,7 +16,7 @@ project-name: goconfig
 license: bsd-2
 
 [OPTIONAL]
-keywords: 
+keywords: config, configuration, ini
 home-page: http://github.com/kless/goconfig
 platform: 
 
