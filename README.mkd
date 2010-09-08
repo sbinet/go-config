@@ -75,19 +75,18 @@ from the special (reserved) section name *[default]*.
 A new configuration file can also be created with:
 
 	c := config.NewFile()
-	c.AddSection("section")
-	c.AddOption("section", "option", "value")
+	c.AddSection("Section")
+	c.AddOption("Section", "option", "value")
 	c.WriteFile("config.ini", 0644, "A header for this file")
 
 This results in the file:
 
 	# A header for this file
 
-	[section]
+	[Section]
 	option: value
 
-Note that sections and options are case-insensitive (values are case-sensitive)
-and are converted to lowercase when saved to a file.
+Note that sections, options and values are all case-sensitive.
 
 
 ## Copyright and licensing

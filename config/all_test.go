@@ -188,7 +188,7 @@ func TestReadFile(t *testing.T) {
 	testGet(t, c, "section-1", "option2", "2#Not a comment")
 	testGet(t, c, "section-1", "option3", "line1\nline2\nline3")
 	testGet(t, c, "section-1", "option4", "this_is_a_part_of_a_small_test.")
-	testGet(t, c, "SECtion-2", "is-FLAG-true", true) // case-insensitive
+	testGet(t, c, "secTION-2", "IS-flag-TRUE", true) // case-sensitive
 }
 
 /* Test writing and reading back a configuration file. */
@@ -218,9 +218,9 @@ func TestWriteReadFile(t *testing.T) {
 		t.Fatalf("ReadFile failure: " + err.String())
 	}
 
-	testGet(t, cr, "first-section", "option1", "value option1")
-	testGet(t, cr, "first-section", "option2", 2)
-	testGet(t, cr, "Another-SECTION", "usehttps", true)
-	testGet(t, cr, "another-section", "url", "https://www.example.com/some/path")
+	testGet(t, cr, "First-Section", "option1", "value option1")
+	testGet(t, cr, "First-Section", "option2", 2)
+	testGet(t, cr, "Another-Section", "useHTTPS", true)
+	testGet(t, cr, "Another-Section", "url", "https://www.example.com/some/path")
 }
 

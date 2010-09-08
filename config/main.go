@@ -16,7 +16,7 @@ import (
 
 
 const (
-	_DEFAULT_SECTION   = "default" // Default section name (must be lower-case).
+	_DEFAULT_SECTION   = "DEFAULT" // Default section name
 	_DEFAULT_COMMENT   = "# "      // Another valid option is ";"
 	_DEFAULT_SEPARATOR = ": "      // Another valid option is "="
 	_DEPTH_VALUES      = 200       // Maximum allowed depth when recursively substituing variable names.

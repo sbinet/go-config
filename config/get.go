@@ -60,9 +60,6 @@ beginning of this documentation.
 It returns an error if either the section or the option do not exist.
 */
 func (self *File) RawString(section string, option string) (value string, err os.Error) {
-	section = strings.ToLower(section)
-	option = strings.ToLower(option)
-
 	if _, ok := self.data[section]; ok {
 		if value, ok = self.data[section][option]; ok {
 			return value, nil
@@ -86,8 +83,6 @@ func (self *File) String(section string, option string) (value string, err os.Er
 		return "", err
 	}
 
-	section = strings.ToLower(section)
-
 	var i int
 
 	for i = 0; i < _DEPTH_VALUES; i++ { // keep a sane depth
@@ -99,7 +94,6 @@ func (self *File) String(section string, option string) (value string, err os.Er
 		// Take off leading '%(' and trailing ')s'
 		noption := strings.TrimLeft(vr, "%(")
 		noption = strings.TrimRight(noption, ")s")
-		noption = strings.ToLower(noption)
 
 		nvalue, _ := self.data[_DEFAULT_SECTION][noption] // search variable in default section
 		if _, ok := self.data[section][noption]; ok {

@@ -11,7 +11,6 @@ package config
 
 import (
 	"os"
-	"strings"
 )
 
 
@@ -28,10 +27,7 @@ func (self *File) AddOption(section string, option string, value string) bool {
 
 	if section == "" {
 		section = _DEFAULT_SECTION
-	} else {
-		section = strings.ToLower(section)
 	}
-	option = strings.ToLower(option)
 
 	_, ok := self.data[section][option]
 	self.data[section][option] = value
@@ -44,9 +40,6 @@ It returns true if the option and value were removed, and false otherwise,
 including if the section did not exist.
 */
 func (self *File) RemoveOption(section string, option string) bool {
-	section = strings.ToLower(section)
-	option = strings.ToLower(option)
-
 	if _, ok := self.data[section]; !ok {
 		return false
 	}
@@ -61,9 +54,6 @@ func (self *File) RemoveOption(section string, option string) bool {
 It returns false if either the option or section do not exist.
 */
 func (self *File) HasOption(section string, option string) bool {
-	section = strings.ToLower(section)
-	option = strings.ToLower(option)
-
 	if _, ok := self.data[section]; !ok {
 		return false
 	}
@@ -79,8 +69,6 @@ It returns an error if the section does not exist and an empty list if the
 section is empty. Options within the default section are also included.
 */
 func (self *File) Options(section string) (options []string, err os.Error) {
-	section = strings.ToLower(section)
-
 	if _, ok := self.data[section]; !ok {
 		return nil, os.NewError("section not found")
 	}

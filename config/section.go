@@ -9,10 +9,6 @@
 
 package config
 
-import (
-	"strings"
-)
-
 
 /* AddSection adds a new section to the configuration.
 
@@ -27,7 +23,6 @@ func (self *File) AddSection(section string) bool {
 		return false
 	}
 
-	section = strings.ToLower(section)
 	if _, ok := self.data[section]; ok {
 		return false
 	}
@@ -41,8 +36,6 @@ func (self *File) AddSection(section string) bool {
 It returns true if the section was removed, and false if section did not exist.
 */
 func (self *File) RemoveSection(section string) bool {
-	section = strings.ToLower(section)
-
 	switch _, ok := self.data[section]; {
 	case !ok:
 		return false
@@ -62,7 +55,7 @@ func (self *File) RemoveSection(section string) bool {
 (The default section always exists.)
 */
 func (self *File) HasSection(section string) bool {
-	_, ok := self.data[strings.ToLower(section)]
+	_, ok := self.data[section]
 
 	return ok
 }
