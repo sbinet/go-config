@@ -16,6 +16,8 @@ import (
 	"testing"
 )
 
+const tmp = "/tmp/__config_test.go__garbage"
+
 
 func testGet(t *testing.T, c *Config, section string, option string,
 expected interface{}) {
@@ -148,9 +150,6 @@ func TestInMemory(t *testing.T) {
 
 /* Create a 'tough' configuration file and test (read) parsing. */
 func TestReadFile(t *testing.T) {
-	const tmp = "/tmp/__config_test.go__garbage"
-	defer os.Remove(tmp)
-
 	file, err := os.Open(tmp, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, 0644)
 	if err != nil {
 		t.Fatalf("Test cannot run because cannot write temporary file: " + tmp)
@@ -194,9 +193,6 @@ func TestReadFile(t *testing.T) {
 
 /* Test writing and reading back a configuration file. */
 func TestWriteReadFile(t *testing.T) {
-	const tmp = "/tmp/__config_test.go__garbage"
-	defer os.Remove(tmp)
-
 	cw := NewDefault()
 
 	// write file; will test only read later on
@@ -204,7 +200,7 @@ func TestWriteReadFile(t *testing.T) {
 	cw.AddOption("First-Section", "option1", "value option1")
 	cw.AddOption("First-Section", "option2", "2")
 
-	cw.AddOption(_DEFAULT_SECTION, "host", "www.example.com")
+	cw.AddOption("", "host", "www.example.com")
 	cw.AddOption(_DEFAULT_SECTION, "protocol", "https://")
 	cw.AddOption(_DEFAULT_SECTION, "base-url", "%(protocol)s%(host)s")
 
@@ -223,5 +219,7 @@ func TestWriteReadFile(t *testing.T) {
 	testGet(t, cr, "First-Section", "option2", 2)
 	testGet(t, cr, "Another-Section", "useHTTPS", true)
 	testGet(t, cr, "Another-Section", "url", "https://www.example.com/some/path")
+
+	defer os.Remove(tmp)
 }
 

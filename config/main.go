@@ -62,7 +62,7 @@ to a file using WriteFile.
 === Arguments
 
 comment: has to be `DEFAULT_COMMENT` or `ALTERNATIVE_COMMENT`
-separator: has to be `DEFAULT_SEPARATOR` or `DEFAULT_SEPARATOR`
+separator: has to be `DEFAULT_SEPARATOR` or `ALTERNATIVE_SEPARATOR`
 preSpace: indicate if is inserted a space before of the separator
 postSpace: indicate if is added a space after of the separator
 
