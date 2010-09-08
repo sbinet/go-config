@@ -16,10 +16,15 @@ import (
 
 
 const (
-	_DEFAULT_SECTION   = "DEFAULT" // Default section name
-	_DEFAULT_COMMENT   = "# "      // Another valid option is ";"
-	_DEFAULT_SEPARATOR = ": "      // Another valid option is "="
-	_DEPTH_VALUES      = 200       // Maximum allowed depth when recursively substituing variable names.
+	// Default section name.
+	_DEFAULT_SECTION = "DEFAULT"
+	// Maximum allowed depth when recursively substituing variable names.
+	_DEPTH_VALUES = 200
+
+	DEFAULT_COMMENT       = "# "
+	ALTERNATIVE_COMMENT   = "; "
+	DEFAULT_SEPARATOR     = ":"
+	ALTERNATIVE_SEPARATOR = "="
 )
 
 var (
@@ -43,22 +48,58 @@ var (
 )
 
 
-/* File is the representation of configuration settings. */
-type File struct {
-	data map[string]map[string]string // Maps sections to options to values.
+/* Config is the representation of configuration settings. */
+type Config struct {
+	data      map[string]map[string]string // Map sections to options to values.
+	comment   string
+	separator string
 }
 
-/* NewFile creates an empty configuration representation.
+/* New creates an empty configuration representation.
 This representation can be filled with AddSection and AddOption and then saved
 to a file using WriteFile.
-*/
-func NewFile() *File {
-	c := new(File)
-	c.data = make(map[string]map[string]string)
 
-	c.AddSection(_DEFAULT_SECTION) // default section always exists
+=== Arguments
+
+comment: has to be `DEFAULT_COMMENT` or `ALTERNATIVE_COMMENT`
+separator: has to be `DEFAULT_SEPARATOR` or `DEFAULT_SEPARATOR`
+preSpace: indicate if is inserted a space before of the separator
+postSpace: indicate if is added a space after of the separator
+
+*/
+func New(comment, separator string, preSpace, postSpace bool) *Config {
+	if comment != DEFAULT_COMMENT && comment != ALTERNATIVE_COMMENT {
+		panic("comment character not valid")
+	}
+
+	if separator != DEFAULT_SEPARATOR && separator != ALTERNATIVE_SEPARATOR {
+		panic("separator character not valid")
+	}
+
+	// === Get spaces around separator
+	if preSpace {
+		separator = " " + separator
+	}
+
+	if postSpace {
+		separator += " "
+	}
+	// ===
+
+	c := new(Config)
+
+	c.data = make(map[string]map[string]string)
+	c.comment = comment
+	c.separator = separator
+
+	c.AddSection(_DEFAULT_SECTION) // Default section always exists.
 
 	return c
+}
+
+/* NewDefault creates a configuration representation with values by default. */
+func NewDefault() *Config {
+	return New(DEFAULT_COMMENT, DEFAULT_SEPARATOR, false, true)
 }
 
 

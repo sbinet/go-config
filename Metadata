@@ -3,7 +3,7 @@
 [MAIN]
 author: msbranco
 download-url: github.com/kless/goconfig/config
-version: 
+version: 0.9.5
 summary: Configuration file parser for INI format
 author-email: http://github.com/msbranco
 

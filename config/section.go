@@ -18,7 +18,7 @@ created.
 It returns true if the new section was inserted, and false if the section
 already existed.
 */
-func (self *File) AddSection(section string) bool {
+func (self *Config) AddSection(section string) bool {
 	if section == "" { // _DEFAULT_SECTION
 		return false
 	}
@@ -35,7 +35,7 @@ func (self *File) AddSection(section string) bool {
 /* RemoveSection removes a section from the configuration.
 It returns true if the section was removed, and false if section did not exist.
 */
-func (self *File) RemoveSection(section string) bool {
+func (self *Config) RemoveSection(section string) bool {
 	switch _, ok := self.data[section]; {
 	case !ok:
 		return false
@@ -54,7 +54,7 @@ func (self *File) RemoveSection(section string) bool {
 /* HasSection checks if the configuration has the given section.
 (The default section always exists.)
 */
-func (self *File) HasSection(section string) bool {
+func (self *Config) HasSection(section string) bool {
 	_, ok := self.data[section]
 
 	return ok
@@ -63,7 +63,7 @@ func (self *File) HasSection(section string) bool {
 /* Sections returns the list of sections in the configuration.
 (The default section always exists.)
 */
-func (self *File) Sections() (sections []string) {
+func (self *Config) Sections() (sections []string) {
 	sections = make([]string, len(self.data))
 
 	i := 0

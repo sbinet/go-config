@@ -22,7 +22,7 @@ advance, it is created.
 It returns true if the option and value were inserted, and false if the value
 was overwritten.
 */
-func (self *File) AddOption(section string, option string, value string) bool {
+func (self *Config) AddOption(section string, option string, value string) bool {
 	self.AddSection(section) // make sure section exists
 
 	if section == "" {
@@ -39,7 +39,7 @@ func (self *File) AddOption(section string, option string, value string) bool {
 It returns true if the option and value were removed, and false otherwise,
 including if the section did not exist.
 */
-func (self *File) RemoveOption(section string, option string) bool {
+func (self *Config) RemoveOption(section string, option string) bool {
 	if _, ok := self.data[section]; !ok {
 		return false
 	}
@@ -53,7 +53,7 @@ func (self *File) RemoveOption(section string, option string) bool {
 /* HasOption checks if the configuration has the given option in the section.
 It returns false if either the option or section do not exist.
 */
-func (self *File) HasOption(section string, option string) bool {
+func (self *Config) HasOption(section string, option string) bool {
 	if _, ok := self.data[section]; !ok {
 		return false
 	}
@@ -68,7 +68,7 @@ func (self *File) HasOption(section string, option string) bool {
 It returns an error if the section does not exist and an empty list if the
 section is empty. Options within the default section are also included.
 */
-func (self *File) Options(section string) (options []string, err os.Error) {
+func (self *Config) Options(section string) (options []string, err os.Error) {
 	if _, ok := self.data[section]; !ok {
 		return nil, os.NewError("section not found")
 	}

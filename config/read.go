@@ -16,17 +16,17 @@ import (
 )
 
 
-/* ReadFile reads a file and returns a new configuration representation.
-This representation can be queried with GetString, etc.
+/* Base to read a file and get the configuration representation.
+That representation can be queried with GetString, etc.
 */
-func ReadFile(fname string) (c *File, err os.Error) {
+func _read(fname string, c *Config) (*Config, os.Error) {
 	var file *os.File
+	var err os.Error
 
 	if file, err = os.Open(fname, os.O_RDONLY, 0); err != nil {
 		return nil, err
 	}
 
-	c = NewFile()
 	if err = c.read(bufio.NewReader(file)); err != nil {
 		return nil, err
 	}
@@ -38,7 +38,24 @@ func ReadFile(fname string) (c *File, err os.Error) {
 	return c, nil
 }
 
-func (self *File) read(buf *bufio.Reader) (err os.Error) {
+/* ReadDefault reads a configuration file and returns its representation.
+All arguments, except `fname`, are related to `New()`
+*/
+func Read(fname string, comment, separator string, preSpace, postSpace bool) (
+*Config, os.Error) {
+	return _read(fname, New(comment, separator, preSpace, postSpace))
+}
+
+/* ReadDefault reads a configuration file and returns its representation.
+It uses values by default.
+*/
+func ReadDefault(fname string) (*Config, os.Error) {
+	return _read(fname, NewDefault())
+}
+
+// ===
+
+func (self *Config) read(buf *bufio.Reader) (err os.Error) {
 	var section, option string
 	for {
 		l, err := buf.ReadString('\n') // parse line-by-line
@@ -60,7 +77,8 @@ func (self *File) read(buf *bufio.Reader) (err os.Error) {
 		case l[0] == ';': // comment
 			continue
 
-		case len(l) >= 3 && strings.ToLower(l[0:3]) == "rem": // comment (for windows users)
+		// comment (for windows users)
+		case len(l) >= 3 && strings.ToLower(l[0:3]) == "rem":
 			continue
 
 		case l[0] == '[' && l[len(l)-1] == ']': // new section

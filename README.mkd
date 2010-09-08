@@ -41,7 +41,7 @@ Nothing.
 
 Given a sample configuration file:
 
-	[default]
+	[DEFAULT]
 	host: www.example.com
 	protocol: http://
 	base-url: %(protocol)s%(host)s
@@ -49,16 +49,16 @@ Given a sample configuration file:
 	[service-1]
 	url: %(base-url)s/some/path
 	delegation: on
-	maxclients=200 # do not set this higher
+	maxclients: 200 # do not set this higher
 	comments: This is a multi-line
-		entry	; And this is a comment
+		entry	# And this is a comment
 
 To read this configuration file, do:
 
-	c, _ := config.ReadFile("config.ini")
+	c, _ := config.ReadDefault("config.cfg")
 
 	c.String("service-1", "url")
-	// result is string :http://www.example.com/some/path"
+	// result is string "http://www.example.com/some/path"
 
 	c.Int("service-1", "maxclients")
 	// result is int 200
@@ -70,14 +70,14 @@ To read this configuration file, do:
 	// result is string "This is a multi-line\nentry"
 
 Note the support for unfolding variables (such as *%(base-url)s*), which are read
-from the special (reserved) section name *[default]*.
+from the special (reserved) section name *[DEFAULT]*.
 
 A new configuration file can also be created with:
 
-	c := config.NewFile()
+	c := config.NewDefault()
 	c.AddSection("Section")
 	c.AddOption("Section", "option", "value")
-	c.WriteFile("config.ini", 0644, "A header for this file")
+	c.WriteFile("config.cfg", 0644, "A header for this file")
 
 This results in the file:
 

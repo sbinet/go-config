@@ -21,7 +21,7 @@ import (
 The desired file permissions must be passed as in os.Open. The header is a
 string that is saved as a comment in the first line of the file.
 */
-func (self *File) WriteFile(fname string, perm uint32, header string) (err os.Error) {
+func (self *Config) WriteFile(fname string, perm uint32, header string) (err os.Error) {
 	var file *os.File
 
 	if file, err = os.Open(fname, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, perm); err != nil {
@@ -37,15 +37,15 @@ func (self *File) WriteFile(fname string, perm uint32, header string) (err os.Er
 	return file.Close()
 }
 
-func (self *File) write(buf *bufio.Writer, header string) (err os.Error) {
+func (self *Config) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
 		// Adds comment character after of each new line.
 		if i := strings.Index(header, "\n"); i != -1 {
-			header = strings.Replace(header, "\n", "\n"+_DEFAULT_COMMENT, -1)
+			header = strings.Replace(header, "\n", "\n"+self.comment, -1)
 		}
 
 		if _, err = buf.WriteString(fmt.Sprint(
-			_DEFAULT_COMMENT, header, "\n")); err != nil {
+			self.comment, header, "\n")); err != nil {
 			return err
 		}
 	}
@@ -59,7 +59,7 @@ func (self *File) write(buf *bufio.Writer, header string) (err os.Error) {
 		}
 		for option, value := range sectionmap {
 			if _, err = buf.WriteString(fmt.Sprint(
-				option, _DEFAULT_SEPARATOR, value, "\n")); err != nil {
+				option, self.separator, value, "\n")); err != nil {
 				return err
 			}
 		}

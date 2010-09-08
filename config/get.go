@@ -19,7 +19,7 @@ import (
 /* Bool has the same behaviour as String but converts the response to bool.
 See "boolString" for string values converted to bool.
 */
-func (self *File) Bool(section string, option string) (value bool, err os.Error) {
+func (self *Config) Bool(section string, option string) (value bool, err os.Error) {
 	sv, err := self.String(section, option)
 	if err != nil {
 		return false, err
@@ -34,7 +34,7 @@ func (self *File) Bool(section string, option string) (value bool, err os.Error)
 }
 
 /* Float has the same behaviour as String but converts the response to float. */
-func (self *File) Float(section string, option string) (value float, err os.Error) {
+func (self *Config) Float(section string, option string) (value float, err os.Error) {
 	sv, err := self.String(section, option)
 	if err == nil {
 		value, err = strconv.Atof(sv)
@@ -44,7 +44,7 @@ func (self *File) Float(section string, option string) (value float, err os.Erro
 }
 
 /* Int has the same behaviour as String but converts the response to int. */
-func (self *File) Int(section string, option string) (value int, err os.Error) {
+func (self *Config) Int(section string, option string) (value int, err os.Error) {
 	sv, err := self.String(section, option)
 	if err == nil {
 		value, err = strconv.Atoi(sv)
@@ -59,7 +59,7 @@ beginning of this documentation.
 
 It returns an error if either the section or the option do not exist.
 */
-func (self *File) RawString(section string, option string) (value string, err os.Error) {
+func (self *Config) RawString(section string, option string) (value string, err os.Error) {
 	if _, ok := self.data[section]; ok {
 		if value, ok = self.data[section][option]; ok {
 			return value, nil
@@ -77,7 +77,7 @@ _DEPTH_VALUES number of iterations.
 It returns an error if either the section or the option do not exist, or the
 unfolding cycled.
 */
-func (self *File) String(section string, option string) (value string, err os.Error) {
+func (self *Config) String(section string, option string) (value string, err os.Error) {
 	value, err = self.RawString(section, option)
 	if err != nil {
 		return "", err
@@ -95,7 +95,8 @@ func (self *File) String(section string, option string) (value string, err os.Er
 		noption := strings.TrimLeft(vr, "%(")
 		noption = strings.TrimRight(noption, ")s")
 
-		nvalue, _ := self.data[_DEFAULT_SECTION][noption] // search variable in default section
+		// Search variable in default section
+		nvalue, _ := self.data[_DEFAULT_SECTION][noption]
 		if _, ok := self.data[section][noption]; ok {
 			nvalue = self.data[section][noption]
 		}
@@ -108,7 +109,9 @@ func (self *File) String(section string, option string) (value string, err os.Er
 	}
 
 	if i == _DEPTH_VALUES {
-		return "", os.NewError("possible cycle while unfolding variables: max depth of " + strconv.Itoa(_DEPTH_VALUES) + " reached")
+		return "", os.NewError(
+			"possible cycle while unfolding variables: max depth of " +
+			strconv.Itoa(_DEPTH_VALUES) + " reached")
 	}
 
 	return value, nil
