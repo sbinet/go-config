@@ -1,4 +1,4 @@
-// Copyright 2009  The "goconfig" Authors
+// Copyright 2010  The "goconfig" Authors
 //
 // Use of this source code is governed by the Simplified BSD License
 // that can be found in the LICENSE file.
