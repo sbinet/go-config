@@ -27,7 +27,7 @@ func (self *Config) Bool(section string, option string) (value bool, err os.Erro
 
 	value, ok := boolString[strings.ToLower(sv)]
 	if !ok {
-		return false, os.NewError("could not parse bool value: " + sv)
+		return false, os.NewError(boolError(sv).String())
 	}
 
 	return value, nil
@@ -64,9 +64,9 @@ func (self *Config) RawString(section string, option string) (value string, err 
 		if value, ok = self.data[section][option]; ok {
 			return value, nil
 		}
-		return "", os.NewError("option not found")
+		return "", os.NewError(optionError(option).String())
 	}
-	return "", os.NewError("section not found")
+	return "", os.NewError(sectionError(section).String())
 }
 
 /* String gets the string value for the given option in the section.
@@ -101,7 +101,7 @@ func (self *Config) String(section string, option string) (value string, err os.
 			nvalue = self.data[section][noption]
 		}
 		if nvalue == "" {
-			return "", os.NewError("option not found: " + noption)
+			return "", os.NewError(optionError(noption).String())
 		}
 
 		// substitute by new value and take off leading '%(' and trailing ')s'
@@ -109,9 +109,7 @@ func (self *Config) String(section string, option string) (value string, err os.
 	}
 
 	if i == _DEPTH_VALUES {
-		return "", os.NewError(
-			"possible cycle while unfolding variables: max depth of " +
-			strconv.Itoa(_DEPTH_VALUES) + " reached")
+		return "", os.NewError(maxDephError(strconv.Itoa(_DEPTH_VALUES)).String())
 	}
 
 	return value, nil

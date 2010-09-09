@@ -57,6 +57,7 @@ func ReadDefault(fname string) (*Config, os.Error) {
 
 func (self *Config) read(buf *bufio.Reader) (err os.Error) {
 	var section, option string
+
 	for {
 		l, err := buf.ReadString('\n') // parse line-by-line
 		if err == os.EOF {
@@ -66,45 +67,46 @@ func (self *Config) read(buf *bufio.Reader) (err os.Error) {
 		}
 
 		l = strings.TrimSpace(l)
-		// switch written for readability (not performance)
+
+		// Switch written for readability (not performance)
 		switch {
-		case len(l) == 0: // empty line
+		// Empty line and comments
+		case len(l) == 0, l[0] == '#', l[0] == ';':
 			continue
 
-		case l[0] == '#': // comment
-			continue
-
-		case l[0] == ';': // comment
-			continue
-
-		// comment (for windows users)
+		// Comment (for windows users)
 		case len(l) >= 3 && strings.ToLower(l[0:3]) == "rem":
 			continue
 
-		case l[0] == '[' && l[len(l)-1] == ']': // new section
+		// New section
+		case l[0] == '[' && l[len(l)-1] == ']':
 			option = "" // reset multi-line value
 			section = strings.TrimSpace(l[1 : len(l)-1])
 			self.AddSection(section)
 
-		case section == "": // not new section and no section defined so far
-			return os.NewError("section not found: must start with section")
+		// No new section and no section defined so
+		//case section == "":
+			//return os.NewError("no section defined")
 
-		default: // other alternatives
+		// Other alternatives
+		default:
 			i := strings.IndexAny(l, "=:")
+
 			switch {
-			case i > 0: // option and value
+			// Option and value
+			case i > 0:
 				i := strings.IndexAny(l, "=:")
 				option = strings.TrimSpace(l[0:i])
 				value := strings.TrimSpace(stripComments(l[i+1:]))
 				self.AddOption(section, option, value)
-
-			case section != "" && option != "": // continuation of multi-line value
+			// Continuation of multi-line value
+			case section != "" && option != "":
 				prev, _ := self.RawString(section, option)
 				value := strings.TrimSpace(stripComments(l))
 				self.AddOption(section, option, prev+"\n"+value)
 
 			default:
-				return os.NewError("could not parse line: " + l)
+				return os.NewError(lineError(l).String())
 			}
 		}
 	}

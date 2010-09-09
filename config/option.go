@@ -16,14 +16,14 @@ import (
 
 /* AddOption adds a new option and value to the configuration.
 
-If the section is nil then uses the section by default; if it does not exist in
-advance, it is created.
+If the section is nil then uses the section by default; if it does not exist, it
+is created in advance.
 
 It returns true if the option and value were inserted, and false if the value
 was overwritten.
 */
 func (self *Config) AddOption(section string, option string, value string) bool {
-	self.AddSection(section) // make sure section exists
+	self.AddSection(section) // Make sure section exists
 
 	if section == "" {
 		section = _DEFAULT_SECTION
@@ -70,7 +70,7 @@ section is empty. Options within the default section are also included.
 */
 func (self *Config) Options(section string) (options []string, err os.Error) {
 	if _, ok := self.data[section]; !ok {
-		return nil, os.NewError("section not found")
+		return nil, os.NewError(sectionError(section).String())
 	}
 
 	options = make([]string, len(self.data[_DEFAULT_SECTION])+len(self.data[section]))

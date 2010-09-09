@@ -12,6 +12,7 @@ include $(GOROOT)/src/Make.inc
 TARG=github.com/kless/goconfig/config
 GOFILES=\
 	main.go\
+	error.go\
 	get.go\
 	option.go\
 	read.go\
