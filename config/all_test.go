@@ -50,96 +50,136 @@ expected interface{}) {
 func TestInMemory(t *testing.T) {
 	c := NewDefault()
 
-	// test empty structure
-	if len(c.Sections()) != 1 { // should be empty
+	// === Test empty structure
+
+	// should be empty
+	if len(c.Sections()) != 1 {
 		t.Errorf("Sections failure: invalid length")
 	}
-	if c.HasSection("no-section") { // test presence of missing section
+
+	// test presence of missing section
+	if c.HasSection("no-section") {
 		t.Errorf("HasSection failure: invalid section")
 	}
-	_, err := c.Options("no-section") // get options for missing section
+
+	// get options for missing section
+	_, err := c.Options("no-section")
 	if err == nil {
 		t.Errorf("Options failure: invalid section")
 	}
-	if c.HasOption("no-section", "no-option") { // test presence of option for missing section
+
+	// test presence of option for missing section
+	if c.HasOption("no-section", "no-option") {
 		t.Errorf("HasSection failure: invalid/section/option")
 	}
-	_, err = c.String("no-section", "no-option") // get value from missing section/option
+
+	// get value from missing section/option
+	_, err = c.String("no-section", "no-option")
 	if err == nil {
 		t.Errorf("String failure: got value for missing section/option")
 	}
-	_, err = c.Int("no-section", "no-option") // get value from missing section/option
+
+	// get value from missing section/option
+	_, err = c.Int("no-section", "no-option")
 	if err == nil {
 		t.Errorf("Int failure: got value for missing section/option")
 	}
-	if c.RemoveSection("no-section") { // remove missing section
+
+	// remove missing section
+	if c.RemoveSection("no-section") {
 		t.Errorf("RemoveSection failure: removed missing section")
 	}
-	if c.RemoveOption("no-section", "no-option") { // remove missing section/option
+
+	// remove missing section/option
+	if c.RemoveOption("no-section", "no-option") {
 		t.Errorf("RemoveOption failure: removed missing section/option")
 	}
 
-	// fill up structure
-	if !c.AddSection("section1") { // add section
+	// === Fill up structure
+
+	// add section
+	if !c.AddSection("section1") {
 		t.Errorf("AddSection failure: false on first insert")
 	}
-	if c.AddSection("section1") { // re-add same section
+
+	// re-add same section
+	if c.AddSection("section1") {
 		t.Errorf("AddSection failure: true on second insert")
 	}
-	if c.AddSection(_DEFAULT_SECTION) { // default section always exists
+
+	// default section always exists
+	if c.AddSection(_DEFAULT_SECTION) {
 		t.Errorf("AddSection failure: true on default section insert")
 	}
 
-	if !c.AddOption("section1", "option1", "value1") { // add option/value
+	// add option/value
+	if !c.AddOption("section1", "option1", "value1") {
 		t.Errorf("AddOption failure: false on first insert")
 	}
 	testGet(t, c, "section1", "option1", "value1") // read it back
 
-	if c.AddOption("section1", "option1", "value2") { // overwrite value
+	// overwrite value
+	if c.AddOption("section1", "option1", "value2") {
 		t.Errorf("AddOption failure: true on second insert")
 	}
 	testGet(t, c, "section1", "option1", "value2") // read it back again
 
-	if !c.RemoveOption("section1", "option1") { // remove option/value
+	// remove option/value
+	if !c.RemoveOption("section1", "option1") {
 		t.Errorf("RemoveOption failure: false on first remove")
 	}
-	if c.RemoveOption("section1", "option1") { // remove again
+
+	// remove again
+	if c.RemoveOption("section1", "option1") {
 		t.Errorf("RemoveOption failure: true on second remove")
 	}
-	_, err = c.String("section1", "option1") // read it back again
+
+	// read it back again
+	_, err = c.String("section1", "option1")
 	if err == nil {
 		t.Errorf("String failure: got value for removed section/option")
 	}
-	if !c.RemoveSection("section1") { // remove existing section
+
+	// remove existing section
+	if !c.RemoveSection("section1") {
 		t.Errorf("RemoveSection failure: false on first remove")
 	}
-	if c.RemoveSection("section1") { // remove again
+
+	// remove again
+	if c.RemoveSection("section1") {
 		t.Errorf("RemoveSection failure: true on second remove")
 	}
 
-	// test types
-	if !c.AddSection("section2") { // add section
+	// === Test types
+
+	// add section
+	if !c.AddSection("section2") {
 		t.Errorf("AddSection failure: false on first insert")
 	}
 
-	if !c.AddOption("section2", "test-number", "666") { // add number
+	// add number
+	if !c.AddOption("section2", "test-number", "666") {
 		t.Errorf("AddOption failure: false on first insert")
 	}
-	testGet(t, c, "section2", "test-number", 666) // read it back
+	testGet(t, c, "section2", "test-number", 666)// read it back
 
-	if !c.AddOption("section2", "test-yes", "yes") { // add 'yes' (bool)
+	// add 'yes' (bool)
+	if !c.AddOption("section2", "test-yes", "yes") {
 		t.Errorf("AddOption failure: false on first insert")
 	}
 	testGet(t, c, "section2", "test-yes", true) // read it back
 
-	if !c.AddOption("section2", "test-false", "false") { // add 'false' (bool)
+	// add 'false' (bool)
+	if !c.AddOption("section2", "test-false", "false") {
 		t.Errorf("AddOption failure: false on first insert")
 	}
 	testGet(t, c, "section2", "test-false", false) // read it back
 
-	// test cycle
+	// === Test cycle
+
 	c.AddOption(_DEFAULT_SECTION, "opt1", "%(opt2)s")
 	c.AddOption(_DEFAULT_SECTION, "opt2", "%(opt1)s")
+
 	_, err = c.String(_DEFAULT_SECTION, "opt1")
 	if err == nil {
 		t.Errorf("String failure: no error for cycle")
@@ -176,11 +216,15 @@ func TestReadFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ReadDefault failure: " + err.String())
 	}
-	if len(c.Sections()) != 3 { // check number of sections
+
+	// check number of sections
+	if len(c.Sections()) != 3 {
 		t.Errorf("Sections failure: wrong number of sections")
 	}
-	opts, err := c.Options("section-1") // check number of options
-	if len(opts) != 6 {                 // 4 of [section-1] plus 2 of [default]
+
+	// check number of options 4 of [section-1] plus 2 of [default]
+	opts, err := c.Options("section-1")
+	if len(opts) != 6 {                 
 		t.Errorf("Options failure: wrong number of options")
 	}
 
