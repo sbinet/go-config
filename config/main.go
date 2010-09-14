@@ -50,9 +50,20 @@ var (
 
 /* Config is the representation of configuration settings. */
 type Config struct {
-	data      map[string]map[string]string // Map sections to options to values.
 	comment   string
 	separator string
+
+	// Section -> option : value
+	data map[string]map[string]*tValue
+
+	// The last identifier used for each section.
+	idOption map[string]int // Section : last identifier
+}
+
+// Hold the position of input for this value.
+type tValue struct {
+	v   string // value
+	pos int    // position
 }
 
 /* New creates an empty configuration representation.
@@ -88,9 +99,10 @@ func New(comment, separator string, preSpace, postSpace bool) *Config {
 
 	c := new(Config)
 
-	c.data = make(map[string]map[string]string)
 	c.comment = comment
 	c.separator = separator
+	c.data = make(map[string]map[string]*tValue)
+	c.idOption = make(map[string]int)
 
 	c.AddSection(_DEFAULT_SECTION) // Default section always exists.
 

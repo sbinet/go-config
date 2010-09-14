@@ -39,7 +39,7 @@ func (self *Config) WriteFile(fname string, perm uint32, header string) (err os.
 
 func (self *Config) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
-		// Adds comment character after of each new line.
+		// Add comment character after of each new line.
 		if i := strings.Index(header, "\n"); i != -1 {
 			header = strings.Replace(header, "\n", "\n"+self.comment, -1)
 		}
@@ -50,20 +50,32 @@ func (self *Config) write(buf *bufio.Writer, header string) (err os.Error) {
 		}
 	}
 
-	for section, sectionmap := range self.data {
-		if section == _DEFAULT_SECTION && len(sectionmap) == 0 {
-			continue // Skips default section if empty.
+	for section, sectionMap := range self.data {
+		// Skip default section if empty.
+		if section == _DEFAULT_SECTION && len(sectionMap) == 0 {
+			continue
 		}
+
 		if _, err = buf.WriteString(fmt.Sprint("\n[", section, "]\n")); err != nil {
 			return err
 		}
-		for option, value := range sectionmap {
-			if _, err = buf.WriteString(fmt.Sprint(
-				option, self.separator, value, "\n")); err != nil {
-				return err
+
+		// Follow the input order.
+		for i := 0; i < self.idOption[section]; i++ {
+			for option, tValue := range sectionMap {
+
+				if tValue.pos == i {
+					if _, err = buf.WriteString(fmt.Sprint(
+						option, self.separator, tValue.v, "\n")); err != nil {
+						return err
+					}
+					self.RemoveOption(section, option)
+					break
+				}
 			}
 		}
 	}
+
 	if _, err = buf.WriteString("\n"); err != nil {
 		return err
 	}

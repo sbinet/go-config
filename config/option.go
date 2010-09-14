@@ -30,7 +30,9 @@ func (self *Config) AddOption(section string, option string, value string) bool 
 	}
 
 	_, ok := self.data[section][option]
-	self.data[section][option] = value
+
+	self.data[section][option] = &tValue{value, self.idOption[section]}
+	self.idOption[section]++
 
 	return !ok
 }
@@ -45,7 +47,7 @@ func (self *Config) RemoveOption(section string, option string) bool {
 	}
 
 	_, ok := self.data[section][option]
-	self.data[section][option] = "", false
+	self.data[section][option] = nil, false
 
 	return ok
 }

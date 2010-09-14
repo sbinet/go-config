@@ -61,8 +61,8 @@ It returns an error if either the section or the option do not exist.
 */
 func (self *Config) RawString(section string, option string) (value string, err os.Error) {
 	if _, ok := self.data[section]; ok {
-		if value, ok = self.data[section][option]; ok {
-			return value, nil
+		if tValue, ok := self.data[section][option]; ok {
+			return tValue.v, nil
 		}
 		return "", os.NewError(optionError(option).String())
 	}
@@ -100,12 +100,12 @@ func (self *Config) String(section string, option string) (value string, err os.
 		if _, ok := self.data[section][noption]; ok {
 			nvalue = self.data[section][noption]
 		}
-		if nvalue == "" {
+		if nvalue.v == "" {
 			return "", os.NewError(optionError(noption).String())
 		}
 
 		// substitute by new value and take off leading '%(' and trailing ')s'
-		value = strings.Replace(value, vr, nvalue, -1)
+		value = strings.Replace(value, vr, nvalue.v, -1)
 	}
 
 	if i == _DEPTH_VALUES {

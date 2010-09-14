@@ -19,7 +19,8 @@ It returns true if the new section was inserted, and false if the section
 already existed.
 */
 func (self *Config) AddSection(section string) bool {
-	if section == "" { // _DEFAULT_SECTION
+	// _DEFAULT_SECTION
+	if section == "" {
 		return false
 	}
 
@@ -27,7 +28,7 @@ func (self *Config) AddSection(section string) bool {
 		return false
 	}
 
-	self.data[section] = make(map[string]string)
+	self.data[section] = make(map[string]*tValue)
 
 	return true
 }
@@ -36,6 +37,21 @@ func (self *Config) AddSection(section string) bool {
 It returns true if the section was removed, and false if section did not exist.
 */
 func (self *Config) RemoveSection(section string) bool {
+	_, ok := self.data[section]
+
+	// Default section cannot be removed.
+	if !ok || section == _DEFAULT_SECTION {
+		return false
+	}
+
+	for o, _ := range self.data[section] {
+		self.data[section][o] = nil, false // *value
+	}
+
+	self.data[section] = nil, false
+	self.idOption[section] = 0, false
+
+/*
 	switch _, ok := self.data[section]; {
 	case !ok:
 		return false
@@ -43,11 +59,11 @@ func (self *Config) RemoveSection(section string) bool {
 		return false // default section cannot be removed
 	default:
 		for o, _ := range self.data[section] {
-			self.data[section][o] = "", false
+			self.data[section][o] = nil, false // *value
 		}
 		self.data[section] = nil, false
 	}
-
+*/
 	return true
 }
 

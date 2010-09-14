@@ -161,7 +161,7 @@ func TestInMemory(t *testing.T) {
 	if !c.AddOption("section2", "test-number", "666") {
 		t.Errorf("AddOption failure: false on first insert")
 	}
-	testGet(t, c, "section2", "test-number", 666)// read it back
+	testGet(t, c, "section2", "test-number", 666) // read it back
 
 	// add 'yes' (bool)
 	if !c.AddOption("section2", "test-yes", "yes") {
@@ -224,7 +224,7 @@ func TestReadFile(t *testing.T) {
 
 	// check number of options 4 of [section-1] plus 2 of [default]
 	opts, err := c.Options("section-1")
-	if len(opts) != 6 {                 
+	if len(opts) != 6 {
 		t.Errorf("Options failure: wrong number of options")
 	}
 
