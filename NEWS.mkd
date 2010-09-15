@@ -23,10 +23,12 @@ listed below.*
   *NewFile()* -> *NewDefault*  
   *ReadFile()* -> *ReadDefault*
 
-+ Added functions *New()* and *Read()* which allow to choose the character of
++ Added functions, *New()*, *Read()*, which allow to choose the character of
 comment and separator, and the spaces around separator.
 
 + Better error handling.
+
++ Both sections and options are showed by its input order.
 
 
 ### 2010-08-22  v0.9

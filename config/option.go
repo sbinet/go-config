@@ -31,8 +31,8 @@ func (self *Config) AddOption(section string, option string, value string) bool 
 
 	_, ok := self.data[section][option]
 
-	self.data[section][option] = &tValue{value, self.idOption[section]}
-	self.idOption[section]++
+	self.data[section][option] = &tValue{self.lastIdOption[section], value}
+	self.lastIdOption[section]++
 
 	return !ok
 }

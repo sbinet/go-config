@@ -30,6 +30,10 @@ func (self *Config) AddSection(section string) bool {
 
 	self.data[section] = make(map[string]*tValue)
 
+	// Section order
+	self.idSection[section] = self.lastIdSection
+	self.lastIdSection++
+
 	return true
 }
 
@@ -47,23 +51,11 @@ func (self *Config) RemoveSection(section string) bool {
 	for o, _ := range self.data[section] {
 		self.data[section][o] = nil, false // *value
 	}
-
 	self.data[section] = nil, false
-	self.idOption[section] = 0, false
 
-/*
-	switch _, ok := self.data[section]; {
-	case !ok:
-		return false
-	case section == _DEFAULT_SECTION:
-		return false // default section cannot be removed
-	default:
-		for o, _ := range self.data[section] {
-			self.data[section][o] = nil, false // *value
-		}
-		self.data[section] = nil, false
-	}
-*/
+	self.lastIdOption[section] = 0, false
+	self.idSection[section] = 0, false
+
 	return true
 }
 
@@ -80,12 +72,16 @@ func (self *Config) HasSection(section string) bool {
 (The default section always exists.)
 */
 func (self *Config) Sections() (sections []string) {
-	sections = make([]string, len(self.data))
+	sections = make([]string, len(self.idSection))
+	pos := 0 // Position in sections
 
-	i := 0
-	for s, _ := range self.data {
-		sections[i] = s
-		i++
+	for i := 0; i < self.lastIdSection; i++ {
+		for section, id := range self.idSection {
+			if id == i {
+				sections[pos] = section
+				pos++
+			}
+		}
 	}
 
 	return sections

@@ -44,33 +44,37 @@ func (self *Config) write(buf *bufio.Writer, header string) (err os.Error) {
 			header = strings.Replace(header, "\n", "\n"+self.comment, -1)
 		}
 
-		if _, err = buf.WriteString(fmt.Sprint(
-			self.comment, header, "\n")); err != nil {
+		if _, err = buf.WriteString(self.comment + header + "\n"); err != nil {
 			return err
 		}
 	}
 
-	for section, sectionMap := range self.data {
-		// Skip default section if empty.
-		if section == _DEFAULT_SECTION && len(sectionMap) == 0 {
-			continue
-		}
+	for _, orderedSection := range self.Sections() {
+		for section, sectionMap := range self.data {
+			if section == orderedSection {
 
-		if _, err = buf.WriteString(fmt.Sprint("\n[", section, "]\n")); err != nil {
-			return err
-		}
+				// Skip default section if empty.
+				if section == _DEFAULT_SECTION && len(sectionMap) == 0 {
+					continue
+				}
 
-		// Follow the input order.
-		for i := 0; i < self.idOption[section]; i++ {
-			for option, tValue := range sectionMap {
+				if _, err = buf.WriteString("\n[" + section + "]\n"); err != nil {
+					return err
+				}
 
-				if tValue.pos == i {
-					if _, err = buf.WriteString(fmt.Sprint(
-						option, self.separator, tValue.v, "\n")); err != nil {
-						return err
+				// Follow the input order in options.
+				for i := 0; i < self.lastIdOption[section]; i++ {
+					for option, tValue := range sectionMap {
+
+						if tValue.position == i {
+							if _, err = buf.WriteString(fmt.Sprint(
+								option, self.separator, tValue.v, "\n")); err != nil {
+								return err
+							}
+							self.RemoveOption(section, option)
+							break
+						}
 					}
-					self.RemoveOption(section, option)
-					break
 				}
 			}
 		}
