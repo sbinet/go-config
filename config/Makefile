@@ -13,10 +13,10 @@ TARG=github.com/kless/goconfig/config
 GOFILES=\
 	main.go\
 	error.go\
-	get.go\
 	option.go\
 	read.go\
 	section.go\
+	type.go\
 	write.go\
 
 include $(GOROOT)/src/Make.pkg
