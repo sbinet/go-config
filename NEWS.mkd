@@ -13,6 +13,11 @@ listed below.*
 
 * * *
 
+### 2010-10-??  v0.9.6
+
++ Changed to line comments.
+
+
 ### 2010-09-15  v0.9.5
 
 + Sections, options and values are all case-sensitive.

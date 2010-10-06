@@ -16,9 +16,8 @@ import (
 )
 
 
-/* Base to read a file and get the configuration representation.
-That representation can be queried with GetString, etc.
-*/
+// Base to read a file and get the configuration representation.
+// That representation can be queried with GetString, etc.
 func _read(fname string, c *Config) (*Config, os.Error) {
 	var file *os.File
 	var err os.Error
@@ -38,17 +37,15 @@ func _read(fname string, c *Config) (*Config, os.Error) {
 	return c, nil
 }
 
-/* ReadDefault reads a configuration file and returns its representation.
-All arguments, except `fname`, are related to `New()`
-*/
+// ReadDefault reads a configuration file and returns its representation.
+// All arguments, except `fname`, are related to `New()`
 func Read(fname string, comment, separator string, preSpace, postSpace bool) (
 *Config, os.Error) {
 	return _read(fname, New(comment, separator, preSpace, postSpace))
 }
 
-/* ReadDefault reads a configuration file and returns its representation.
-It uses values by default.
-*/
+// ReadDefault reads a configuration file and returns its representation.
+// It uses values by default.
 func ReadDefault(fname string) (*Config, os.Error) {
 	return _read(fname, NewDefault())
 }

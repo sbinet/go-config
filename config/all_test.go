@@ -46,7 +46,7 @@ expected interface{}) {
 	}
 }
 
-/* Create configuration representation and run multiple tests in-memory. */
+// Creates configuration representation and run multiple tests in-memory.
 func TestInMemory(t *testing.T) {
 	c := NewDefault()
 
@@ -188,7 +188,7 @@ func TestInMemory(t *testing.T) {
 	}
 }
 
-/* Create a 'tough' configuration file and test (read) parsing. */
+// Creates a 'tough' configuration file and test (read) parsing.
 func TestReadFile(t *testing.T) {
 	file, err := os.Open(tmp, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, 0644)
 	if err != nil {
@@ -235,7 +235,7 @@ func TestReadFile(t *testing.T) {
 	testGet(t, c, "secTION-2", "IS-flag-TRUE", true) // case-sensitive
 }
 
-/* Test writing and reading back a configuration file. */
+// Tests writing and reading back a configuration file.
 func TestWriteReadFile(t *testing.T) {
 	cw := NewDefault()
 

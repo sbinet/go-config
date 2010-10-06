@@ -70,18 +70,16 @@ type tValue struct {
 	v        string // value
 }
 
-/* New creates an empty configuration representation.
-This representation can be filled with AddSection and AddOption and then saved
-to a file using WriteFile.
-
-=== Arguments
-
-comment: has to be `DEFAULT_COMMENT` or `ALTERNATIVE_COMMENT`
-separator: has to be `DEFAULT_SEPARATOR` or `ALTERNATIVE_SEPARATOR`
-preSpace: indicate if is inserted a space before of the separator
-postSpace: indicate if is added a space after of the separator
-
-*/
+// New creates an empty configuration representation.
+// This representation can be filled with AddSection and AddOption and then
+// saved to a file using WriteFile.
+// 
+// === Arguments
+// 
+// comment: has to be `DEFAULT_COMMENT` or `ALTERNATIVE_COMMENT`
+// separator: has to be `DEFAULT_SEPARATOR` or `ALTERNATIVE_SEPARATOR`
+// preSpace: indicate if is inserted a space before of the separator
+// postSpace: indicate if is added a space after of the separator
 func New(comment, separator string, preSpace, postSpace bool) *Config {
 	if comment != DEFAULT_COMMENT && comment != ALTERNATIVE_COMMENT {
 		panic("comment character not valid")
@@ -114,7 +112,7 @@ func New(comment, separator string, preSpace, postSpace bool) *Config {
 	return c
 }
 
-/* NewDefault creates a configuration representation with values by default. */
+// NewDefault creates a configuration representation with values by default.
 func NewDefault() *Config {
 	return New(DEFAULT_COMMENT, DEFAULT_SEPARATOR, false, true)
 }
@@ -124,7 +122,7 @@ func NewDefault() *Config {
 // ===
 
 func stripComments(l string) string {
-	// comments are preceded by space or TAB
+	// Comments are preceded by space or TAB
 	for _, c := range []string{" ;", "\t;", " #", "\t#"} {
 		if i := strings.Index(l, c); i != -1 {
 			l = l[0:i]

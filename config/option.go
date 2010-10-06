@@ -14,14 +14,13 @@ import (
 )
 
 
-/* AddOption adds a new option and value to the configuration.
-
-If the section is nil then uses the section by default; if it does not exist, it
-is created in advance.
-
-It returns true if the option and value were inserted, and false if the value
-was overwritten.
-*/
+// AddOption adds a new option and value to the configuration.
+//
+// If the section is nil then uses the section by default; if it does not exist,
+// it is created in advance.
+//
+// It returns true if the option and value were inserted, and false if the value
+// was overwritten.
 func (self *Config) AddOption(section string, option string, value string) bool {
 	self.AddSection(section) // Make sure section exists
 
@@ -37,10 +36,9 @@ func (self *Config) AddOption(section string, option string, value string) bool 
 	return !ok
 }
 
-/* RemoveOption removes a option and value from the configuration.
-It returns true if the option and value were removed, and false otherwise,
-including if the section did not exist.
-*/
+// RemoveOption removes a option and value from the configuration.
+// It returns true if the option and value were removed, and false otherwise,
+// including if the section did not exist.
 func (self *Config) RemoveOption(section string, option string) bool {
 	if _, ok := self.data[section]; !ok {
 		return false
@@ -52,9 +50,8 @@ func (self *Config) RemoveOption(section string, option string) bool {
 	return ok
 }
 
-/* HasOption checks if the configuration has the given option in the section.
-It returns false if either the option or section do not exist.
-*/
+// HasOption checks if the configuration has the given option in the section.
+// It returns false if either the option or section do not exist.
 func (self *Config) HasOption(section string, option string) bool {
 	if _, ok := self.data[section]; !ok {
 		return false
@@ -66,10 +63,9 @@ func (self *Config) HasOption(section string, option string) bool {
 	return okd || oknd
 }
 
-/* Options returns the list of options available in the given section.
-It returns an error if the section does not exist and an empty list if the
-section is empty. Options within the default section are also included.
-*/
+// Options returns the list of options available in the given section.
+// It returns an error if the section does not exist and an empty list if the
+// section is empty. Options within the default section are also included.
 func (self *Config) Options(section string) (options []string, err os.Error) {
 	if _, ok := self.data[section]; !ok {
 		return nil, os.NewError(sectionError(section).String())
