@@ -19,10 +19,8 @@ import (
 // Base to read a file and get the configuration representation.
 // That representation can be queried with GetString, etc.
 func _read(fname string, c *Config) (*Config, os.Error) {
-	var file *os.File
-	var err os.Error
-
-	if file, err = os.Open(fname, os.O_RDONLY, 0); err != nil {
+	file, err := os.Open(fname, os.O_RDONLY, 0)
+	if err != nil {
 		return nil, err
 	}
 
