@@ -101,7 +101,7 @@ func (self *Config) read(buf *bufio.Reader) (err os.Error) {
 				self.AddOption(section, option, prev+"\n"+value)
 
 			default:
-				return os.NewError(lineError(l).String())
+				return os.NewError("could not parse line: " + l)
 			}
 		}
 	}

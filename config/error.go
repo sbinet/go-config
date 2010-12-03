@@ -13,39 +13,13 @@ package config
 type sectionError string
 
 func (self sectionError) String() string {
-	return "goconfig: section not found: " + string(self)
+	return "section not found: " + string(self)
 }
 
-// ===
 
 type optionError string
 
 func (self optionError) String() string {
-	return "goconfig: option not found: " + string(self)
-}
-
-// ===
-
-type boolError string
-
-func (self boolError) String() string {
-	return "goconfig: could not parse bool value: " + string(self)
-}
-
-// ===
-
-type maxDephError string
-
-func (self maxDephError) String() string {
-	return "goconfig: possible cycle while unfolding variables: max depth of " +
-		string(self) + " reached"
-}
-
-// ===
-
-type lineError string
-
-func (self lineError) String() string {
-	return "goconfig: could not parse line: " + string(self)
+	return "option not found: " + string(self)
 }
 

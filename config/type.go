@@ -26,7 +26,7 @@ func (self *Config) Bool(section string, option string) (value bool, err os.Erro
 
 	value, ok := boolString[strings.ToLower(sv)]
 	if !ok {
-		return false, os.NewError(boolError(sv).String())
+		return false, os.NewError("could not parse bool value: " + sv)
 	}
 
 	return value, nil
@@ -106,7 +106,8 @@ func (self *Config) String(section string, option string) (value string, err os.
 	}
 
 	if i == _DEPTH_VALUES {
-		return "", os.NewError(maxDephError(strconv.Itoa(_DEPTH_VALUES)).String())
+		return "", os.NewError("possible cycle while unfolding variables: " +
+			"max depth of " + strconv.Itoa(_DEPTH_VALUES) + " reached")
 	}
 
 	return value, nil
