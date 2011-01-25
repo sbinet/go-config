@@ -33,10 +33,10 @@ func (self *Config) Bool(section string, option string) (value bool, err os.Erro
 }
 
 // Float has the same behaviour as String but converts the response to float.
-func (self *Config) Float(section string, option string) (value float, err os.Error) {
+func (self *Config) Float(section string, option string) (value float64, err os.Error) {
 	sv, err := self.String(section, option)
 	if err == nil {
-		value, err = strconv.Atof(sv)
+		value, err = strconv.Atof64(sv)
 	}
 
 	return value, err
