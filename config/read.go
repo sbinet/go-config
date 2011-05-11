@@ -19,7 +19,7 @@ import (
 // Base to read a file and get the configuration representation.
 // That representation can be queried with GetString, etc.
 func _read(fname string, c *Config) (*Config, os.Error) {
-	file, err := os.Open(fname, os.O_RDONLY, 0)
+	file, err := os.Open(fname)
 	if err != nil {
 		return nil, err
 	}

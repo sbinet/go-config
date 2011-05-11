@@ -9,7 +9,7 @@
 
 include $(GOROOT)/src/Make.inc
 
-TARG=github.com/kless/goconfig/config
+TARG=bitbucket.org/binet/go-config/config
 GOFILES=\
 	config.go\
 	error.go\
