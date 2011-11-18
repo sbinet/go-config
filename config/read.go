@@ -11,14 +11,15 @@ package config
 
 import (
 	"bufio"
+	"errors"
+	"io"
 	"os"
 	"strings"
 )
 
-
 // Base to read a file and get the configuration representation.
 // That representation can be queried with GetString, etc.
-func _read(fname string, c *Config) (*Config, os.Error) {
+func _read(fname string, c *Config) (*Config, error) {
 	file, err := os.Open(fname)
 	if err != nil {
 		return nil, err
@@ -37,25 +38,24 @@ func _read(fname string, c *Config) (*Config, os.Error) {
 
 // ReadDefault reads a configuration file and returns its representation.
 // All arguments, except `fname`, are related to `New()`
-func Read(fname string, comment, separator string, preSpace, postSpace bool) (
-*Config, os.Error) {
+func Read(fname string, comment, separator string, preSpace, postSpace bool) (*Config, error) {
 	return _read(fname, New(comment, separator, preSpace, postSpace))
 }
 
 // ReadDefault reads a configuration file and returns its representation.
 // It uses values by default.
-func ReadDefault(fname string) (*Config, os.Error) {
+func ReadDefault(fname string) (*Config, error) {
 	return _read(fname, NewDefault())
 }
 
 // ===
 
-func (self *Config) read(buf *bufio.Reader) (err os.Error) {
+func (self *Config) read(buf *bufio.Reader) (err error) {
 	var section, option string
 
 	for {
 		l, err := buf.ReadString('\n') // parse line-by-line
-		if err == os.EOF {
+		if err == io.EOF {
 			break
 		} else if err != nil {
 			return err
@@ -81,7 +81,7 @@ func (self *Config) read(buf *bufio.Reader) (err os.Error) {
 
 		// No new section and no section defined so
 		//case section == "":
-			//return os.NewError("no section defined")
+		//return os.NewError("no section defined")
 
 		// Other alternatives
 		default:
@@ -101,10 +101,9 @@ func (self *Config) read(buf *bufio.Reader) (err os.Error) {
 				self.AddOption(section, option, prev+"\n"+value)
 
 			default:
-				return os.NewError("could not parse line: " + l)
+				return errors.New("could not parse line: " + l)
 			}
 		}
 	}
 	return nil
 }
-

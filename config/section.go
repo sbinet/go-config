@@ -9,7 +9,6 @@
 
 package config
 
-
 // AddSection adds a new section to the configuration.
 //
 // If the section is nil then uses the section by default which it's already
@@ -47,12 +46,12 @@ func (self *Config) RemoveSection(section string) bool {
 	}
 
 	for o, _ := range self.data[section] {
-		self.data[section][o] = nil, false // *value
+		delete(self.data[section], o) // *value
 	}
-	self.data[section] = nil, false
+	delete(self.data, section)
 
-	self.lastIdOption[section] = 0, false
-	self.idSection[section] = 0, false
+	delete(self.lastIdOption, section)
+	delete(self.idSection, section)
 
 	return true
 }
@@ -82,4 +81,3 @@ func (self *Config) Sections() (sections []string) {
 
 	return sections
 }
-

@@ -10,15 +10,14 @@
 package config
 
 import (
-	"os"
+	"errors"
 	"strconv"
 	"strings"
 )
 
-
 // Bool has the same behaviour as String but converts the response to bool.
 // See "boolString" for string values converted to bool.
-func (self *Config) Bool(section string, option string) (value bool, err os.Error) {
+func (self *Config) Bool(section string, option string) (value bool, err error) {
 	sv, err := self.String(section, option)
 	if err != nil {
 		return false, err
@@ -26,14 +25,14 @@ func (self *Config) Bool(section string, option string) (value bool, err os.Erro
 
 	value, ok := boolString[strings.ToLower(sv)]
 	if !ok {
-		return false, os.NewError("could not parse bool value: " + sv)
+		return false, errors.New("could not parse bool value: " + sv)
 	}
 
 	return value, nil
 }
 
 // Float has the same behaviour as String but converts the response to float.
-func (self *Config) Float(section string, option string) (value float64, err os.Error) {
+func (self *Config) Float(section string, option string) (value float64, err error) {
 	sv, err := self.String(section, option)
 	if err == nil {
 		value, err = strconv.Atof64(sv)
@@ -43,7 +42,7 @@ func (self *Config) Float(section string, option string) (value float64, err os.
 }
 
 // Int has the same behaviour as String but converts the response to int.
-func (self *Config) Int(section string, option string) (value int, err os.Error) {
+func (self *Config) Int(section string, option string) (value int, err error) {
 	sv, err := self.String(section, option)
 	if err == nil {
 		value, err = strconv.Atoi(sv)
@@ -57,14 +56,14 @@ func (self *Config) Int(section string, option string) (value int, err os.Error)
 // the beginning of this documentation.
 //
 // It returns an error if either the section or the option do not exist.
-func (self *Config) RawString(section string, option string) (value string, err os.Error) {
+func (self *Config) RawString(section string, option string) (value string, err error) {
 	if _, ok := self.data[section]; ok {
 		if tValue, ok := self.data[section][option]; ok {
 			return tValue.v, nil
 		}
-		return "", os.NewError(optionError(option).String())
+		return "", errors.New(optionError(option).String())
 	}
-	return "", os.NewError(sectionError(section).String())
+	return "", errors.New(sectionError(section).String())
 }
 
 // String gets the string value for the given option in the section.
@@ -74,7 +73,7 @@ func (self *Config) RawString(section string, option string) (value string, err 
 //
 // It returns an error if either the section or the option do not exist, or the
 // unfolding cycled.
-func (self *Config) String(section string, option string) (value string, err os.Error) {
+func (self *Config) String(section string, option string) (value string, err error) {
 	value, err = self.RawString(section, option)
 	if err != nil {
 		return "", err
@@ -98,7 +97,7 @@ func (self *Config) String(section string, option string) (value string, err os.
 			nvalue = self.data[section][noption]
 		}
 		if nvalue.v == "" {
-			return "", os.NewError(optionError(noption).String())
+			return "", errors.New(optionError(noption).String())
 		}
 
 		// substitute by new value and take off leading '%(' and trailing ')s'
@@ -106,10 +105,9 @@ func (self *Config) String(section string, option string) (value string, err os.
 	}
 
 	if i == _DEPTH_VALUES {
-		return "", os.NewError("possible cycle while unfolding variables: " +
+		return "", errors.New("possible cycle while unfolding variables: " +
 			"max depth of " + strconv.Itoa(_DEPTH_VALUES) + " reached")
 	}
 
 	return value, nil
 }
-
