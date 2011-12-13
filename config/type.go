@@ -35,7 +35,7 @@ func (self *Config) Bool(section string, option string) (value bool, err error) 
 func (self *Config) Float(section string, option string) (value float64, err error) {
 	sv, err := self.String(section, option)
 	if err == nil {
-		value, err = strconv.Atof64(sv)
+		value, err = strconv.ParseFloat(sv, 64)
 	}
 
 	return value, err
