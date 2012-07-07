@@ -19,7 +19,7 @@ import (
 // WriteFile saves the configuration representation to a file.
 // The desired file permissions must be passed as in os.Open. The header is a
 // string that is saved as a comment in the first line of the file.
-func (self *Config) WriteFile(fname string, perm uint32, header string) error {
+func (self *Config) WriteFile(fname string, perm os.FileMode, header string) error {
 	file, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, perm)
 	if err != nil {
 		return err
